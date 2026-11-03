@@ -1,0 +1,14 @@
+# Your personal data. Never publish any of this.
+/cv/
+/profile/
+/config/
+/tracker/
+/applications/
+/APPLICATIONS.md
+/.venv/
+/dashboard/applications.json
+/dashboard/paused.json
+/dashboard/replies.json
+/dashboard/index_doc.json
+.DS_Store
+__pycache__/

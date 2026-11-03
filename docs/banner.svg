@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-label="ApplyCrew: type Start. It finds the jobs, fills the forms, and watches your inbox.">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101A2E"/><stop offset="1" stop-color="#1B2A4A"/></linearGradient></defs>
+<rect width="1280" height="420" fill="url(#g)"/>
+<g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
+<text x="72" y="130" fill="#F4F6FB" font-size="68" font-weight="700">ApplyCrew</text>
+<text x="72" y="190" fill="#C9D3E8" font-size="30">Type Start. It finds the jobs, fills the forms,</text>
+<text x="72" y="232" fill="#C9D3E8" font-size="30">and watches your inbox.</text>
+<g font-size="20" fill="#F4F6FB">
+<rect x="72" y="282" width="140" height="44" rx="22" fill="#2C4A7C"/><text x="142" y="310" text-anchor="middle">No code</text>
+<rect x="226" y="282" width="196" height="44" rx="22" fill="#2C4A7C"/><text x="324" y="310" text-anchor="middle">Any profession</text>
+<rect x="436" y="282" width="196" height="44" rx="22" fill="#2C4A7C"/><text x="534" y="310" text-anchor="middle">Runs on your PC</text>
+</g>
+<text x="72" y="372" fill="#8FA1C4" font-size="18">Built for Claude Code. Open source.</text>
+<rect x="800" y="86" width="408" height="248" rx="16" fill="#0B1220" stroke="#31456E"/>
+<circle cx="826" cy="112" r="6" fill="#E5675F"/><circle cx="846" cy="112" r="6" fill="#E8B64C"/><circle cx="866" cy="112" r="6" fill="#5FB878"/>
+<g font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="19">
+<text x="826" y="160" fill="#8FA1C4">you</text><text x="880" y="160" fill="#F4F6FB">Start</text>
+<text x="826" y="204" fill="#6FB6FF">agent</text><text x="894" y="204" fill="#C9D3E8">First, drop your CV</text>
+<text x="894" y="232" fill="#C9D3E8">in the folder I just</text>
+<text x="894" y="260" fill="#C9D3E8">opened. Then we'll</text>
+<text x="894" y="288" fill="#C9D3E8">do the rest together.</text>
+</g></g></svg>

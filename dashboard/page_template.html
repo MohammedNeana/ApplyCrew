@@ -1,0 +1,857 @@
+<meta name="dash-one-writer">
+<style>
+#dash-root { --dash-gutter: clamp(16px, 3vw, 36px); }
+.jh { display: grid; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); max-width: 1280px; margin-inline: auto; }
+.jh-head { display: grid; gap: var(--cds-gap-xs); }
+.jh-title { margin: 0; font-family: var(--font-anthropic-serif); font-weight: 400; font-size: calc(var(--cds-font-size-title) * 1.15); text-wrap: balance; }
+.jh-lede { margin: 0; color: var(--color-fg-muted); max-width: 70ch; }
+.jh-lede b { color: var(--color-fg); font-variant-numeric: tabular-nums; }
+.jh-tabs { display: flex; gap: var(--cds-gap-xs); border-bottom: 1px solid var(--color-border-line); flex-wrap: wrap; }
+.jh-tab { all: unset; cursor: pointer; padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-body); color: var(--color-fg-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; display: inline-flex; gap: 6px; align-items: baseline; }
+.jh-tab:hover { color: var(--color-fg); }
+.jh-tab:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.jh-tab[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+.jh-count { font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; padding: 0 7px; border-radius: 999px; background: var(--cds-chart-grid); color: var(--color-fg); }
+.jh-count.warn { background: transparent; border: 1px solid var(--color-warn); color: var(--color-warn); }
+.jh-page { display: grid; gap: var(--cds-gap-lg); }
+.jh-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: var(--cds-gap-md); }
+.jh-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; gap: 2px; }
+.jh-tile-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.jh-num { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: calc(var(--cds-font-size-title) * 1.4); line-height: 1.1; font-variant-numeric: tabular-nums; min-height: 1.1em; }
+.jh-tile-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.jh-tile.is-good .jh-num { color: var(--color-ok); }
+.jh-tile.is-you { border-color: var(--color-warn); }
+.jh-tile.is-you .jh-num { color: var(--color-warn); }
+.jh-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: var(--cds-gap-md); }
+.jh-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-sm); align-content: start; min-width: 0; }
+.jh-card h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+.jh-note { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.jh-chart { position: relative; min-height: 210px; }
+.jh-bars { display: grid; gap: 8px; min-height: 120px; align-content: start; }
+.jh-bar { display: grid; grid-template-columns: minmax(7rem, 10rem) 1fr 2.4rem; gap: var(--cds-gap-sm); align-items: center; font-size: var(--cds-font-size-caption); }
+.jh-bar-track { height: 12px; background: var(--cds-chart-grid); border-radius: var(--cds-radius); overflow: hidden; }
+.jh-bar-fill { height: 100%; border-radius: var(--cds-radius); }
+.jh-bar-n { text-align: right; font-variant-numeric: tabular-nums; }
+.jh-recent { display: grid; gap: 0; }
+.jh-recent button { all: unset; cursor: pointer; display: grid; grid-template-columns: 5.5rem 1fr auto; gap: var(--cds-gap-sm); padding: 8px 4px; border-bottom: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); align-items: baseline; }
+.jh-recent button:hover { background: var(--cds-chart-grid); }
+.jh-recent button:focus-visible { outline: 2px solid var(--color-fg); }
+.jh-recent .co { font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-body); }
+.jh-recent .ro { color: var(--color-fg-muted); }
+.jh-muted { color: var(--color-fg-muted); }
+.jh-tools { display: flex; gap: var(--cds-gap-sm); flex-wrap: wrap; align-items: center; }
+.jh-search, .jh-select { padding: 6px 10px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); font: inherit; font-size: var(--cds-font-size-body); }
+.jh-search { flex: 1 1 14rem; min-width: 0; }
+.jh-chip { border: 1px solid var(--color-border-line); background: var(--color-bg); color: var(--color-fg); border-radius: 999px; padding: 3px 12px; font: inherit; font-size: var(--cds-font-size-caption); cursor: pointer; }
+.jh-chip[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
+.jh-split { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--cds-gap-md); align-items: start; }
+@media (max-width: 900px) { .jh-split { grid-template-columns: 1fr; } }
+.jh-list { max-height: 44rem; overflow: auto; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); }
+.jh-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.jh-table th { position: sticky; top: 0; z-index: 1; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); padding: 0; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.jh-table th button { all: unset; cursor: pointer; display: block; padding: 8px 10px; }
+.jh-table th button:focus-visible { outline: 2px solid var(--color-fg); }
+.jh-table th[aria-sort="ascending"] button::after { content: " ↑"; }
+.jh-table th[aria-sort="descending"] button::after { content: " ↓"; }
+.jh-table td { padding: 8px 10px; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.jh-table tbody tr { cursor: pointer; }
+.jh-table tbody tr:hover td { background: var(--cds-chart-grid); }
+.jh-table tbody tr.is-sel td { background: var(--cds-chart-grid); }
+.jh-table tbody tr.is-sel td:first-child { box-shadow: inset 3px 0 0 var(--color-fg); }
+.jh-table td .sub { display: block; color: var(--color-fg-muted); }
+.jh-pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: var(--cds-font-size-caption); border: 1px solid currentColor; white-space: nowrap; }
+.jh-pill.ok { color: var(--color-ok); } .jh-pill.warn { color: var(--color-warn); } .jh-pill.bad { color: var(--color-bad); } .jh-pill.muted { color: var(--color-fg-muted); }
+.jh-detail { position: sticky; top: 8px; max-height: calc(100vh - 16px); overflow: auto; }
+.jh-detail h2 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); }
+.jh-empty { padding: var(--cds-pad-xl) var(--cds-pad-md); text-align: center; color: var(--color-fg-muted); border: 1px dashed var(--color-border-line); border-radius: var(--cds-radius); }
+.jh-facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px var(--cds-gap-md); margin: 0; font-size: var(--cds-font-size-caption); }
+.jh-facts dt { color: var(--color-fg-muted); } .jh-facts dd { margin: 0; }
+.jh-facts a { color: inherit; }
+.jh-sec { display: grid; gap: 6px; padding-top: var(--cds-pad-sm); border-top: 1px solid var(--color-border-line); }
+.jh-sec h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+.jh-prose { white-space: pre-wrap; font-size: var(--cds-font-size-caption); line-height: 1.55; max-height: 20rem; overflow: auto; }
+.jh-qa td:first-child { color: var(--color-fg-muted); width: 46%; }
+.jh-qa tr { cursor: default !important; }
+.jh-qa tr:hover td { background: transparent !important; }
+.jh-reply { display: grid; gap: 4px; padding: var(--cds-pad-sm) 0; border-bottom: 1px solid var(--color-border-line); }
+.jh-reply:last-child { border-bottom: 0; }
+.jh-reply-top { display: flex; gap: var(--cds-gap-sm); align-items: center; flex-wrap: wrap; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.jh-reason { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); }
+.jh-linkbtn { all: unset; cursor: pointer; text-decoration: underline; font-size: var(--cds-font-size-caption); justify-self: start; }
+.jh-linkbtn:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.jh-wait { display: grid; gap: var(--cds-gap-sm); }
+.jh-witem { display: grid; grid-template-columns: 1fr auto; gap: 4px var(--cds-gap-md); padding: var(--cds-pad-md); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-panel); }
+.jh-witem .job { font-weight: var(--cds-font-weight-medium); }
+.jh-witem .job a { color: inherit; }
+.jh-witem .why { grid-column: 1 / -1; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.jh-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; }
+@media (max-width: 640px) { .jh-hide-narrow { display: none; } .jh-bar { grid-template-columns: 6.5rem 1fr 2rem; } }
+.jh-map-stage { --map-sea: #0a0f16; --map-land: #1b2430; --map-line: #303c4c; --map-ink: #eef2f7; --map-mute: #9aa7b8; --map-panel: #141b25; position: relative; height: clamp(340px, 58vw, 640px); background: var(--map-sea); border: 1px solid var(--map-line); border-radius: var(--cds-radius); overflow: hidden; color: var(--map-ink); color-scheme: dark; }
+.jh-map { position: absolute; inset: 0; cursor: grab; }
+.jh-map:active { cursor: grabbing; }
+.jh-map svg { display: block; width: 100%; height: 100%; }
+.jh-map .land path { fill: var(--map-land); stroke: var(--map-line); stroke-width: .6; vector-effect: non-scaling-stroke; cursor: pointer; }
+.jh-map .land path:hover { stroke: var(--map-ink); stroke-width: 1; }
+.jh-map .land path.is-sel { stroke: var(--map-ink); stroke-width: 1.6; }
+.jh-map .leaders line { stroke: var(--map-mute); stroke-width: 1; }
+.jh-map .bub { cursor: pointer; }
+.jh-map .bub circle { fill: var(--map-panel); stroke-width: 2; }
+.jh-map .bub text { fill: var(--map-ink); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: central; font-variant-numeric: tabular-nums; pointer-events: none; }
+.jh-map-btns { position: absolute; top: 12px; right: 12px; display: grid; gap: 6px; }
+.jh-map-btn { width: 36px; height: 36px; display: grid; place-items: center; padding: 0; background: var(--map-panel); color: var(--map-ink); border: 1px solid var(--map-line); border-radius: var(--cds-radius); font: inherit; font-size: 18px; line-height: 1; cursor: pointer; }
+.jh-map-btn:hover { border-color: var(--map-mute); }
+.jh-map-btn:focus-visible { outline: 2px solid var(--map-ink); outline-offset: 2px; }
+.jh-map-btn.small { font-size: 11px; }
+.jh-map-legend { position: absolute; left: 12px; bottom: 12px; display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: var(--map-panel); border: 1px solid var(--map-line); border-radius: var(--cds-radius); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; pointer-events: none; }
+.jh-map-legend i { display: block; width: 72px; height: 8px; border-radius: 4px; }
+.jh-map-tip { position: absolute; pointer-events: none; max-width: 15rem; background: var(--map-panel); border: 1px solid var(--map-line); border-radius: var(--cds-radius); padding: 8px 10px; font-size: var(--cds-font-size-caption); display: grid; gap: 2px; font-variant-numeric: tabular-nums; }
+.jh-map-tip b { font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-body); }
+.jh-map-tip span { color: var(--map-mute); }
+.jh-chipline { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm) var(--cds-gap-lg); align-items: center; }
+.jh-chipset { display: flex; flex-wrap: wrap; gap: 6px; }
+.jh-mapjobs { display: grid; gap: 0; max-height: 24rem; overflow: auto; }
+.jh-mapjobs button, .jh-mapjobs div { all: unset; display: grid; gap: 1px; padding: 7px 4px; border-bottom: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); }
+.jh-mapjobs button { cursor: pointer; }
+.jh-mapjobs button:hover { background: var(--cds-chart-grid); }
+.jh-mapjobs button:focus-visible { outline: 2px solid var(--color-fg); }
+.jh-mapjobs b { font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-body); }
+.jh-maprej { max-height: 26rem; }
+.jh-map-tip em { font-style: normal; color: var(--map-ink); }
+.jh-mapcols { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--cds-gap-md); align-items: start; }
+@media (max-width: 900px) { .jh-mapcols { grid-template-columns: 1fr; } }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+@media (prefers-reduced-motion: no-preference) {
+  .jh-bar-fill { animation: jh-grow var(--cds-dur-slow) var(--cds-ease-out) both; transform-origin: left; }
+  @keyframes jh-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+}
+</style>
+
+<div class="jh">
+  <header class="jh-head">
+    <h1 class="jh-title" id="top">{{OWNER}}'s job hunt</h1>
+    <p class="jh-lede"><b data-draw="kpi" data-source="kpis" data-field="total">—</b> applications sent so far, <b data-draw="kpi" data-source="kpis" data-field="gulf">—</b> of them in {{FOCUS_LABEL}}. <b data-draw="kpi" data-source="kpis" data-field="interviews">—</b> replies or interviews so far, and <b data-draw="kpi" data-source="kpis" data-field="rejected">—</b> rejections.</p>
+  </header>
+
+  <nav class="jh-tabs" role="tablist" aria-label="Sections">
+    <button class="jh-tab" type="button" role="tab" id="tab-overview" data-tab="overview" aria-selected="true">Overview</button>
+    <button class="jh-tab" type="button" role="tab" id="tab-map" data-tab="map" aria-selected="false">Map</button>
+    <button class="jh-tab" type="button" role="tab" id="tab-applications" data-tab="applications" aria-selected="false">Applications <span class="jh-count" data-draw="kpi" data-source="kpis" data-field="total">—</span></button>
+    <button class="jh-tab" type="button" role="tab" id="tab-rejected" data-tab="rejected" aria-selected="false">Rejected <span class="jh-count" data-draw="kpi" data-source="kpis" data-field="rejected">—</span></button>
+    <button class="jh-tab" type="button" role="tab" id="tab-waiting" data-tab="waiting" aria-selected="false">Waiting on {{OWNER}} <span class="jh-count warn" data-draw="kpi" data-source="kpis" data-field="waiting">—</span></button>
+  </nav>
+
+  <section class="jh-page" id="overview" data-page="overview">
+    <div class="jh-tiles">
+      <div class="jh-tile">
+        <div class="jh-tile-label">Applications sent</div>
+        <div class="jh-num" data-draw="kpi" data-source="kpis" data-field="total">—</div>
+        <div class="jh-tile-note">All countries and channels</div>
+      </div>
+      <div class="jh-tile">
+        <div class="jh-tile-label">{{FOCUS_LABEL}}</div>
+        <div class="jh-num" data-draw="kpi" data-source="kpis" data-field="gulf">—</div>
+        <div class="jh-tile-note">{{FOCUS_NOTE}}</div>
+      </div>
+      <div class="jh-tile is-good">
+        <div class="jh-tile-label">Replies &amp; interviews</div>
+        <div class="jh-num" data-draw="kpi" data-source="kpis" data-field="interviews">—</div>
+        <div class="jh-tile-note">Interviews, tests, recruiter replies, offers</div>
+      </div>
+      <div class="jh-tile">
+        <div class="jh-tile-label">Rejected</div>
+        <div class="jh-num" data-draw="kpi" data-source="kpis" data-field="rejected">—</div>
+        <div class="jh-tile-note">Employers who said no, in the last 30 days</div>
+      </div>
+      <div class="jh-tile is-you">
+        <div class="jh-tile-label">Waiting on {{OWNER}}</div>
+        <div class="jh-num" data-draw="kpi" data-source="kpis" data-field="waiting">—</div>
+        <div class="jh-tile-note">Things only {{OWNER}} can finish</div>
+      </div>
+    </div>
+
+    <div class="jh-grid2">
+      <article class="jh-card" id="by-day">
+        <h2>Applications per day</h2>
+        <p class="jh-note">How many went out each day.</p>
+        <div class="jh-chart" data-draw="dayChart" data-source="by_day"></div>
+      </article>
+      <article class="jh-card" id="latest">
+        <h2>Latest applications</h2>
+        <p class="jh-note">The 8 most recent. Click one to open its details.</p>
+        <div class="jh-recent" data-draw="recent" data-source="applications"></div>
+      </article>
+    </div>
+
+    <div class="jh-grid2">
+      <article class="jh-card" id="by-country">
+        <h2>Where they went</h2>
+        <p class="jh-note">Country or region of the job.</p>
+        <div class="jh-bars" data-draw="countryBars" data-source="by_country"></div>
+      </article>
+      <article class="jh-card" id="by-type">
+        <h2>Type of role and how we applied</h2>
+        <p class="jh-note">Each application uses the CV chosen for that kind of job.</p>
+        <div class="jh-bars" data-draw="trackBars" data-source="by_track"></div>
+        <div class="jh-bars" data-draw="channelBars" data-source="by_channel"></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="jh-page" id="applications" data-page="applications" hidden>
+    <div class="jh-tools">
+      <input class="jh-search" id="jh-search" type="search" placeholder="Search company or role" aria-label="Search applications">
+      <select class="jh-select" id="jh-country" aria-label="Country" data-draw="countrySelect" data-source="by_country"></select>
+      <select class="jh-select" id="jh-status" aria-label="Status">
+        <option value="">All statuses</option>
+        <option value="applied">No answer yet</option>
+        <option value="replied">Replied, needs a look</option>
+        <option value="rejected">Rejected</option>
+      </select>
+      <button class="jh-chip" type="button" data-track="" aria-pressed="true">All roles</button>
+    </div>
+    <div class="jh-split">
+      <div class="jh-list">
+        <table class="jh-table" data-source="applications" data-row-key="url">
+          <thead><tr>
+            <th data-field="date" aria-sort="descending"><button type="button" data-sort="date">Date</button></th>
+            <th data-field="company"><button type="button" data-sort="company">Company and role</button></th>
+            <th data-field="country" class="jh-hide-narrow"><button type="button" data-sort="country">Where</button></th>
+            <th data-field="status"><button type="button" data-sort="status">Status</button></th>
+          </tr></thead>
+          <tbody data-draw="appRows"></tbody>
+        </table>
+      </div>
+      <aside class="jh-card jh-detail" id="detail" data-source="applications" aria-live="polite">
+        <div class="jh-empty" id="detail-empty">Pick an application on the left to see the job, every question we answered, and the CV we sent.</div>
+        <div class="jh-page" id="detail-body" hidden>
+          <div>
+            <h2 data-draw="dTitle">—</h2>
+            <p class="jh-note" data-draw="dRole">—</p>
+          </div>
+          <dl class="jh-facts">
+            <dt>Applied</dt><dd data-draw="dDate">—</dd>
+            <dt>Where</dt><dd data-draw="dWhere">—</dd>
+            <dt>How</dt><dd data-draw="dChannel">—</dd>
+            <dt>CV sent</dt><dd data-draw="dCV">—</dd>
+            <dt>Status</dt><dd data-draw="dStatus">—</dd>
+            <dt>Posting</dt><dd><a data-draw="dLink" target="_blank" rel="noopener">—</a></dd>
+          </dl>
+          <div class="jh-sec">
+            <h3>What the employer said</h3>
+            <div data-draw="dReplies" data-source="replies">—</div>
+          </div>
+          <div class="jh-sec">
+            <h3>About the job</h3>
+            <div class="jh-prose" data-draw="dJD">—</div>
+          </div>
+          <div class="jh-sec">
+            <h3>Questions and what we answered</h3>
+            <p class="jh-note">Contact, salary and personal answers are hidden on this shared page.</p>
+            <table class="jh-table jh-qa"><tbody data-draw="dQA"></tbody></table>
+          </div>
+          <div class="jh-sec">
+            <h3>Cover letter or message</h3>
+            <div class="jh-prose" data-draw="dLetter">—</div>
+          </div>
+          <div class="jh-sec">
+            <h3>Interview prep</h3>
+            <div class="jh-prose" data-draw="dPrep">—</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="jh-page" id="rejected" data-page="rejected" hidden>
+    <p class="jh-note">Every employer who said no, from both Gmail inboxes, for the last 30 days. Most give no reason. When they do, it is shown here in their words.</p>
+    <div class="jh-tools">
+      <input class="jh-search" id="jh-rsearch" type="search" placeholder="Search company or role" aria-label="Search rejections">
+      <button class="jh-chip" type="button" data-rsrc="" aria-pressed="true">All</button>
+      <button class="jh-chip" type="button" data-rsrc="agent" aria-pressed="false">Sent by the agent</button>
+      <button class="jh-chip" type="button" data-rsrc="you" aria-pressed="false">Sent by {{OWNER}} earlier</button>
+    </div>
+    <div class="jh-split">
+      <div class="jh-list">
+        <table class="jh-table" data-source="replies" data-row-key="id">
+          <thead><tr>
+            <th data-field="date" style="padding:8px 10px">Date</th>
+            <th data-field="company" style="padding:8px 10px">Company and role</th>
+            <th data-field="reason" class="jh-hide-narrow" style="padding:8px 10px">Reason</th>
+          </tr></thead>
+          <tbody data-draw="rejRows"></tbody>
+        </table>
+      </div>
+      <aside class="jh-card jh-detail" data-source="replies" aria-live="polite" data-draw="rejDetail"></aside>
+    </div>
+  </section>
+
+  <section class="jh-page" id="map" data-page="map" hidden>
+    <div class="jh-tiles">
+      <div class="jh-tile">
+        <div class="jh-tile-label">Countries with applications</div>
+        <div class="jh-num" data-draw="mapKpi" data-source="map_totals" data-field="countries">—</div>
+        <div class="jh-tile-note">Remote jobs with no listed country are counted apart</div>
+      </div>
+      <div class="jh-tile">
+        <div class="jh-tile-label">Applications on the map</div>
+        <div class="jh-num" data-draw="mapKpi" data-source="map_totals" data-field="on_map">—</div>
+        <div class="jh-tile-note">Plus <b data-draw="mapKpi" data-source="map_totals" data-field="remote">—</b> remote with no country</div>
+      </div>
+      <div class="jh-tile">
+        <div class="jh-tile-label">Rejections with a known place</div>
+        <div class="jh-num" data-draw="mapKpi" data-source="map_totals" data-field="rejected_placed">—</div>
+        <div class="jh-tile-note">From the job's location or the employer's email</div>
+      </div>
+      <div class="jh-tile">
+        <div class="jh-tile-label">Rejections with no country</div>
+        <div class="jh-num" data-draw="mapKpi" data-source="map_totals" data-field="rejected_unplaced">—</div>
+        <div class="jh-tile-note">The email never said where the job was, so they stay off the map</div>
+      </div>
+    </div>
+    <div class="jh-card">
+      <h2 id="map-title">Where the applications went</h2>
+      <div class="jh-chipline">
+        <div class="jh-chipset" role="group" aria-label="What the map shows">
+          <button class="jh-chip" type="button" data-map-metric="applications" aria-pressed="true">Applications</button>
+          <button class="jh-chip" type="button" data-map-metric="rejected" aria-pressed="false">Rejections</button>
+          <button class="jh-chip" type="button" data-map-metric="waiting" aria-pressed="false">No answer yet</button>
+          <button class="jh-chip" type="button" data-map-metric="positive" aria-pressed="false">Positive replies</button>
+        </div>
+        <div class="jh-chipset" role="group" aria-label="Jump to a region">
+          <button class="jh-chip" type="button" data-map-view="all" aria-pressed="true">All my countries</button>
+          <button class="jh-chip" type="button" data-map-view="gulf" aria-pressed="false">Gulf</button>
+          <button class="jh-chip" type="button" data-map-view="europe" aria-pressed="false">Europe</button>
+          <button class="jh-chip" type="button" data-map-view="world" aria-pressed="false">World</button>
+        </div>
+      </div>
+      <div class="jh-map-stage">
+        <div class="jh-map" data-draw="worldMap" data-source="world map_by_country replies"></div>
+        <div class="jh-map-btns">
+          <button class="jh-map-btn" type="button" data-map-zoom="in" aria-label="Zoom in">+</button>
+          <button class="jh-map-btn" type="button" data-map-zoom="out" aria-label="Zoom out">−</button>
+          <button class="jh-map-btn small" type="button" data-map-zoom="reset" aria-label="Reset the view">Fit</button>
+        </div>
+        <div class="jh-map-legend" data-draw="mapLegend" data-source="map_by_country">—</div>
+      </div>
+      <p class="jh-note">Zoom with + and −, scroll or pinch. Drag to move. Click a country to see its jobs. Rejections count each rejection email, the same way as the Rejected tab, and include jobs you applied to yourself before the agent started, so a country can show more rejections than applications.</p>
+    </div>
+    <div class="jh-card">
+      <h2>Every rejection, by company</h2>
+      <p class="jh-note">Click a row to read what the employer said. "Not stated" means the email never said where the job was.</p>
+      <div class="jh-list jh-maprej">
+        <table class="jh-table" data-source="replies" data-row-key="id">
+          <thead><tr><th data-field="company" style="padding:8px 10px">Company</th><th data-field="role" class="jh-hide-narrow" style="padding:8px 10px">Role</th><th data-field="map" style="padding:8px 10px">Country</th><th data-field="date" style="padding:8px 10px">Date</th><th data-field="reason" class="jh-hide-narrow" style="padding:8px 10px">Reason</th></tr></thead>
+          <tbody data-draw="mapRejRows"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="jh-mapcols">
+      <div class="jh-card">
+        <h2>Every country</h2>
+        <div class="jh-list">
+          <table class="jh-table" data-source="map_by_country" data-row-key="country">
+            <thead><tr><th data-field="country"><button type="button" tabindex="-1">Country</button></th><th data-field="applications"><button type="button" tabindex="-1">Applications</button></th><th data-field="rejected"><button type="button" tabindex="-1">Rejected</button></th><th data-field="waiting"><button type="button" tabindex="-1">No answer</button></th><th data-field="positive"><button type="button" tabindex="-1">Positive</button></th></tr></thead>
+            <tbody data-draw="mapRows"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="jh-card" data-draw="mapDetail" data-source="applications replies map_by_country">—</div>
+    </div>
+  </section>
+
+  <section class="jh-page" id="waiting" data-page="waiting" hidden>
+    <p class="jh-note"><b>Waiting</b> means only {{OWNER}} can finish it. <b>Queued</b> means the agent already has what it needs and will retry. <b>Skipped</b> and <b>Sent</b> need nothing.</p>
+    <div class="jh-wait" data-draw="waitList" data-source="paused"></div>
+  </section>
+</div>
+
+<script>
+dash.calc('kpis', {
+  inputs: ['applications', 'paused', 'replies'], title: 'Headline numbers',
+  description: 'Counts of sent applications, Gulf applications, replies and interviews, rejections, and forms waiting on {{OWNER}}.',
+  fn: (applications, paused, replies) => {
+    const gulf = new Set({{FOCUS_JSON}});
+    return [{
+      total: applications.length,
+      gulf: applications.filter((a) => gulf.has(a.country)).length,
+      interviews: applications.filter((a) => ['screening', 'interview', 'offer', 'test', 'assessment', 'recruiter_reply'].includes(String(a.status).toLowerCase())).length,
+      rejected: replies.filter((r) => r.outcome === 'rejected').length,
+      waiting: paused.filter((p) => p.state === 'Waiting').length,
+    }];
+  },
+});
+dash.calc('by_day', {
+  inputs: ['applications'], title: 'Applications per day', description: 'Applications sent on each date.',
+  fn: (applications) => { const m = new Map(); applications.forEach((a) => m.set(a.date, (m.get(a.date) || 0) + 1)); return [...m].map(([day, n]) => ({day, n})).sort((x, y) => (x.day < y.day ? -1 : 1)); },
+});
+dash.calc('by_country', {
+  inputs: ['applications'], title: 'Applications by country', description: 'Applications per country or region of the job.',
+  fn: (applications) => { const m = new Map(); applications.forEach((a) => m.set(a.country, (m.get(a.country) || 0) + 1)); return [...m].map(([country, n]) => ({country, n})).sort((x, y) => y.n - x.n); },
+});
+dash.calc('by_channel', {
+  inputs: ['applications'], title: 'Applications by channel', description: 'Applications per way of applying.',
+  fn: (applications) => { const m = new Map(); applications.forEach((a) => m.set(a.channel, (m.get(a.channel) || 0) + 1)); return [...m].map(([channel, n]) => ({channel, n})).sort((x, y) => y.n - x.n); },
+});
+dash.calc('by_track', {
+  inputs: ['applications'], title: 'Applications by CV', description: 'Which CV went out with each application.',
+  fn: (applications) => { const m = new Map(); applications.forEach((a) => m.set(a.track, (m.get(a.track) || 0) + 1)); return [...m].map(([track, n]) => ({track, n})).sort((x, y) => y.n - x.n); },
+});
+
+const fmtInt = d3.format(',');
+const fmtDay = (s) => (s ? d3.utcFormat('%b %-d, %Y')(new Date(s + 'T00:00:00Z')) : '—');
+const fmtShort = (s) => (s ? d3.utcFormat('%b %-d')(new Date(s + 'T00:00:00Z')) : '');
+const state = {tab: 'overview', q: '', status: '', track: '', country: '', sort: 'date', dir: -1, sel: null};
+const STATUS = {applied: ['Applied', 'muted'], interview: ['Interview', 'ok'], screening: ['Screening', 'ok'], test: ['Test', 'ok'], assessment: ['Assessment', 'ok'], offer: ['Offer', 'ok'], recruiter_reply: ['Recruiter replied', 'ok'], rejected: ['Rejected', 'bad'], received: ['Confirmed received', 'muted']};
+function pill(s) { const [t, c] = STATUS[String(s || 'applied').toLowerCase()] || [s, 'muted']; const el = document.createElement('span'); el.className = 'jh-pill ' + c; el.textContent = t; return el; }
+
+dash.draw('kpi', (el) => { const k = dash.data('kpis'); el.textContent = k.status === 'ok' && k.data.length ? fmtInt(k.data[0][el.dataset.field]) : '—'; });
+
+function barList(el, id, key, colorIndex) {
+  const r = dash.data(id);
+  if (r.status !== 'ok') { el.textContent = '—'; return; }
+  const max = d3.max(r.data, (d) => d.n) || 1;
+  el.replaceChildren(...r.data.map((d, i) => {
+    const row = document.createElement('div'); row.className = 'jh-bar';
+    const lab = document.createElement('div'); lab.textContent = d[key];
+    const track = document.createElement('div'); track.className = 'jh-bar-track';
+    const fill = document.createElement('div'); fill.className = 'jh-bar-fill';
+    fill.style.width = (100 * d.n / max) + '%';
+    fill.style.background = i === 0 ? dash.colors[colorIndex] : 'var(--cds-chart-muted)';
+    fill.style.animationDelay = (i * 40) + 'ms';
+    track.append(fill);
+    const n = document.createElement('div'); n.className = 'jh-bar-n'; n.textContent = fmtInt(d.n);
+    row.append(lab, track, n); return row;
+  }));
+}
+dash.draw('countryBars', (el) => barList(el, 'by_country', 'country', 0));
+dash.draw('trackBars', (el) => barList(el, 'by_track', 'track', 2));
+dash.draw('channelBars', (el) => barList(el, 'by_channel', 'channel', 1));
+
+dash.draw('dayChart', (el) => {
+  const r = dash.data('by_day'); el.replaceChildren();
+  if (r.status !== 'ok' || !r.data.length) { el.textContent = '—'; return; }
+  const rows = r.data;
+  const w = Math.max(260, el.clientWidth || 320), h = 210, m = {t: 18, r: 8, b: 26, l: 30};
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img').attr('aria-label', 'Applications per day');
+  const x = d3.scaleBand(rows.map((d) => d.day), [m.l, w - m.r]).padding(0.3);
+  const y = d3.scaleLinear([0, (d3.max(rows, (d) => d.n) || 1) * 1.15], [h - m.b, m.t]).nice();
+  svg.append('g').selectAll('line').data(y.ticks(4)).join('line').attr('x1', m.l).attr('x2', w - m.r).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(4)).join('text').attr('x', m.l - 6).attr('y', (t) => y(t)).attr('dy', '0.32em').attr('text-anchor', 'end').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)').text((t) => fmtInt(t));
+  const bw = Math.min(32, x.bandwidth());
+  const tip = d3.select(el).append('div').attr('class', 'jh-tip').style('opacity', 0);
+  svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (d) => x(d.day) + (x.bandwidth() - bw) / 2).attr('width', bw).attr('y', (d) => y(d.n)).attr('height', (d) => y(0) - y(d.n)).attr('rx', 3).attr('fill', dash.colors[0])
+    .on('mousemove', (ev, d) => { const [px, py] = d3.pointer(ev, el); tip.style('opacity', 1).text(fmtDay(d.day) + ': ' + fmtInt(d.n) + ' sent'); const tw = tip.node().offsetWidth; tip.style('left', Math.max(0, Math.min(px + 10, el.clientWidth - tw)) + 'px').style('top', Math.max(0, py - 34) + 'px'); })
+    .on('mouseleave', () => tip.style('opacity', 0));
+  svg.append('g').selectAll('text').data(rows).join('text').attr('x', (d) => x(d.day) + x.bandwidth() / 2).attr('y', (d) => y(d.n) - 4).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg)').style('font-size', 'var(--cds-font-size-caption)').text((d) => fmtInt(d.n));
+  const step = Math.ceil(rows.length / Math.max(1, Math.floor((w - m.l) / 70)));
+  svg.append('g').selectAll('text').data(rows.filter((d, i) => i % step === 0)).join('text').attr('x', (d) => x(d.day) + x.bandwidth() / 2).attr('y', h - 8).attr('text-anchor', 'middle').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)').text((d) => fmtShort(d.day));
+});
+
+dash.draw('recent', (el) => {
+  const r = dash.data('applications');
+  if (r.status !== 'ok') { el.textContent = '—'; return; }
+  const rows = [...r.data].sort((a, b) => (a.date < b.date ? 1 : -1)).slice(0, 8);
+  el.replaceChildren(...rows.map((a) => {
+    const b = document.createElement('button'); b.type = 'button';
+    const d = document.createElement('span'); d.className = 'jh-muted'; d.textContent = fmtShort(a.date);
+    const mid = document.createElement('span');
+    const co = document.createElement('span'); co.className = 'co'; co.textContent = a.company;
+    const ro = document.createElement('span'); ro.className = 'ro'; ro.textContent = '  ' + a.role;
+    mid.append(co, ro);
+    b.append(d, mid, pill(a.status));
+    b.addEventListener('click', () => { showTab('applications'); select(a.url); });
+    return b;
+  }));
+});
+
+dash.draw('countrySelect', (sel) => {
+  const r = dash.data('by_country');
+  sel.replaceChildren(new Option('All countries', ''), ...(r.status === 'ok' ? r.data : []).map((d) => new Option(d.country + ' (' + d.n + ')', d.country)));
+  sel.value = state.country;
+  sel.onchange = () => { state.country = sel.value; dash.draw('appRows'); };
+});
+
+function filtered() {
+  const r = dash.data('applications'); if (r.status !== 'ok') return [];
+  const q = state.q.trim().toLowerCase();
+  return r.data
+    .filter((a) => { const s = String(a.status || 'applied').toLowerCase(); return !state.status || (state.status === 'replied' ? !['applied', 'rejected'].includes(s) : s === state.status); })
+    .filter((a) => !state.track || a.track === state.track)
+    .filter((a) => !state.country || a.country === state.country)
+    .filter((a) => !q || [a.company, a.role, a.location].join(' ').toLowerCase().includes(q))
+    .sort((a, b) => (String(a[state.sort]) < String(b[state.sort]) ? -1 : String(a[state.sort]) > String(b[state.sort]) ? 1 : 0) * state.dir);
+}
+dash.draw('appRows', (tb) => {
+  const rows = filtered(); tb.replaceChildren();
+  tb.append(...rows.map((a) => {
+    const tr = document.createElement('tr'); tr.dataset.key = a.url;
+    if (a.url === state.sel) tr.classList.add('is-sel');
+    tr.addEventListener('click', () => select(a.url));
+    const d = document.createElement('td'); d.textContent = fmtShort(a.date);
+    const cr = document.createElement('td'); cr.textContent = a.company;
+    const sub = document.createElement('span'); sub.className = 'sub'; sub.textContent = a.role; cr.append(sub);
+    const w = document.createElement('td'); w.className = 'jh-hide-narrow'; w.textContent = a.country;
+    const s = document.createElement('td'); s.append(pill(a.status));
+    tr.append(d, cr, w, s); return tr;
+  }));
+});
+
+const selRow = () => { const r = dash.data('applications'); return r.status === 'ok' ? r.data.find((a) => a.url === state.sel) : null; };
+const put = (el, v) => { el.textContent = v && String(v).trim() ? v : '—'; };
+dash.draw('dTitle', (el) => { const a = selRow(); put(el, a && a.company); });
+dash.draw('dRole', (el) => { const a = selRow(); put(el, a && a.role); });
+dash.draw('dDate', (el) => { const a = selRow(); put(el, a && fmtDay(a.date)); });
+dash.draw('dWhere', (el) => { const a = selRow(); put(el, a && (a.location || a.country)); });
+dash.draw('dChannel', (el) => { const a = selRow(); put(el, a && a.channel); });
+dash.draw('dCV', (el) => { const a = selRow(); put(el, a && a.cv_label); });
+dash.draw('dStatus', (el) => { const a = selRow(); el.replaceChildren(); if (a) el.append(pill(a.status)); else el.textContent = '—'; });
+dash.draw('dLink', (el) => { const a = selRow(); if (a) { el.href = a.url; el.textContent = 'Open the job posting'; } else { el.removeAttribute('href'); el.textContent = '—'; } });
+dash.draw('dJD', (el) => { const a = selRow(); put(el, a && (a.jd || a.summary)); });
+function replyBox(x) {
+  const box = document.createElement('div'); box.className = 'jh-reply';
+  const top = document.createElement('div'); top.className = 'jh-reply-top';
+  const when = document.createElement('span'); when.textContent = fmtDay(x.date);
+  top.append(pill(x.outcome), when); box.append(top);
+  if (x.outcome === 'rejected') { const why = document.createElement('div'); why.className = 'jh-reason'; why.textContent = 'Reason: ' + (x.reason || 'No reason given'); box.append(why); }
+  const sub = document.createElement('p'); sub.className = 'jh-note'; sub.textContent = x.subject || ''; box.append(sub);
+  const t = document.createElement('div'); t.className = 'jh-prose'; t.textContent = x.text || 'The email had no text we could show.'; box.append(t);
+  return box;
+}
+dash.draw('dReplies', (el) => {
+  const a = selRow(); el.replaceChildren();
+  if (!a) { el.textContent = '—'; return; }
+  const rr = dash.data('replies');
+  const list = rr.status === 'ok' ? rr.data.filter((x) => x.app_url === a.url) : [];
+  if (!list.length) { el.textContent = 'No reply from the employer yet.'; return; }
+  el.append(...list.map(replyBox));
+});
+const RS = {q: '', src: '', sel: null};
+function rejList() {
+  const r = dash.data('replies'); if (r.status !== 'ok') return [];
+  const q = RS.q.trim().toLowerCase();
+  return r.data.filter((x) => x.outcome === 'rejected').filter((x) => !RS.src || x.source === RS.src)
+    .filter((x) => !q || [x.company, x.role].join(' ').toLowerCase().includes(q));
+}
+dash.draw('rejRows', (tb) => {
+  tb.replaceChildren();
+  tb.append(...rejList().map((x) => {
+    const tr = document.createElement('tr'); tr.dataset.key = x.id;
+    if (x.id === RS.sel) tr.classList.add('is-sel');
+    tr.addEventListener('click', () => { RS.sel = x.id; dash.draw('rejRows'); dash.draw('rejDetail'); if (window.innerWidth <= 900) document.querySelector('[data-draw="rejDetail"]').scrollIntoView({behavior: 'smooth', block: 'start'}); });
+    const d = document.createElement('td'); d.textContent = fmtShort(x.date);
+    const c = document.createElement('td'); c.textContent = x.company;
+    const sub = document.createElement('span'); sub.className = 'sub'; sub.textContent = x.role; c.append(sub);
+    const w = document.createElement('td'); w.className = 'jh-hide-narrow'; w.textContent = x.reason || 'No reason given';
+    tr.append(d, c, w); return tr;
+  }));
+});
+dash.draw('rejDetail', (el) => {
+  const r = dash.data('replies'); el.replaceChildren();
+  const x = r.status === 'ok' ? r.data.find((y) => y.id === RS.sel) : null;
+  if (!x) { const e = document.createElement('div'); e.className = 'jh-empty'; e.textContent = 'Pick a rejection on the left to read what the employer wrote.'; el.append(e); return; }
+  const h = document.createElement('h2'); h.textContent = x.company;
+  const role = document.createElement('p'); role.className = 'jh-note'; role.textContent = x.role;
+  const who = document.createElement('p'); who.className = 'jh-note'; who.textContent = x.source === 'agent' ? 'Application sent by the agent.' : '{{OWNER}} applied to this one directly, so there is no application report for it.';
+  el.append(h, role, replyBox(x), who);
+  if (x.app_url) { const b = document.createElement('button'); b.type = 'button'; b.className = 'jh-linkbtn'; b.textContent = 'See the full application'; b.addEventListener('click', () => { showTab('applications'); select(x.app_url); }); el.append(b); }
+});
+dash.draw('dLetter', (el) => { const a = selRow(); put(el, a && (a.letter || 'No cover letter was asked for.')); });
+dash.draw('dPrep', (el) => { const a = selRow(); put(el, a && a.prep); });
+dash.draw('dQA', (tb) => {
+  const a = selRow(); tb.replaceChildren(); if (!a) return;
+  tb.append(...(Array.isArray(a.qa) ? a.qa : []).map((x) => { const tr = document.createElement('tr'); const q = document.createElement('td'); q.textContent = x.q; const v = document.createElement('td'); v.textContent = x.a; tr.append(q, v); return tr; }));
+});
+
+dash.draw('waitList', (el) => {
+  const r = dash.data('paused');
+  if (r.status !== 'ok') { el.textContent = '—'; return; }
+  const order = {Waiting: 0, Queued: 1, Skipped: 2, Sent: 3};
+  const rows = [...r.data].sort((a, b) => (order[a.state] ?? 9) - (order[b.state] ?? 9));
+  el.replaceChildren(...rows.map((p) => {
+    const box = document.createElement('div'); box.className = 'jh-witem';
+    const job = document.createElement('div'); job.className = 'job';
+    if (p.url) { const l = document.createElement('a'); l.href = p.url; l.target = '_blank'; l.rel = 'noopener'; l.textContent = p.job; job.append(l); } else job.textContent = p.job;
+    const st = document.createElement('span'); st.className = 'jh-pill ' + (p.state === 'Waiting' ? 'warn' : p.state === 'Sent' ? 'ok' : 'muted'); st.textContent = p.state;
+    const why = document.createElement('div'); why.className = 'why'; why.textContent = p.reason;
+    box.append(job, st, why); return box;
+  }));
+});
+
+const DETAIL_DRAWS = ['dTitle', 'dRole', 'dDate', 'dWhere', 'dChannel', 'dCV', 'dStatus', 'dLink', 'dReplies', 'dJD', 'dLetter', 'dPrep', 'dQA'];
+function select(url) {
+  state.sel = url;
+  document.querySelectorAll('#detail-empty').forEach((e) => { e.hidden = true; });
+  document.querySelectorAll('#detail-body').forEach((e) => { e.hidden = false; });
+  DETAIL_DRAWS.concat('appRows').forEach((n) => dash.draw(n));
+  if (window.innerWidth <= 900) document.querySelectorAll('#detail').forEach((d) => d.scrollIntoView({behavior: 'smooth', block: 'start'}));
+}
+function showTab(name) {
+  state.tab = name;
+  document.querySelectorAll('[data-page]').forEach((s) => { s.hidden = s.dataset.page !== name; });
+  document.querySelectorAll('.jh-tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+  dash.setLink(name);
+}
+document.querySelectorAll('.jh-tab').forEach((t) => t.addEventListener('click', () => showTab(t.dataset.tab)));
+document.querySelectorAll('#jh-search').forEach((inp) => inp.addEventListener('input', () => { state.q = inp.value; dash.draw('appRows'); }));
+document.querySelectorAll('#jh-status').forEach((sel) => { sel.onchange = () => { state.status = sel.value; dash.draw('appRows'); }; });
+document.querySelectorAll('#jh-rsearch').forEach((inp) => inp.addEventListener('input', () => { RS.q = inp.value; dash.draw('rejRows'); }));
+document.querySelectorAll('.jh-chip[data-rsrc]').forEach((btn) => btn.addEventListener('click', () => {
+  RS.src = btn.dataset.rsrc;
+  document.querySelectorAll('.jh-chip[data-rsrc]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+  dash.draw('rejRows');
+}));
+document.querySelectorAll('.jh-chip[data-track]').forEach((btn) => btn.addEventListener('click', () => {
+  state.track = btn.dataset.track;
+  document.querySelectorAll('.jh-chip[data-track]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+  dash.draw('appRows');
+}));
+document.querySelectorAll('#applications th button[data-sort]').forEach((btn) => btn.addEventListener('click', () => {
+  const key = btn.dataset.sort;
+  state.dir = state.sort === key ? -state.dir : (key === 'date' ? -1 : 1); state.sort = key;
+  document.querySelectorAll('#applications th').forEach((th) => th.removeAttribute('aria-sort'));
+  btn.closest('th').setAttribute('aria-sort', state.dir === 1 ? 'ascending' : 'descending');
+  dash.draw('appRows');
+}));
+dash.calc('map_by_country', {
+  inputs: ['applications', 'replies'], title: 'Applications and rejections by country',
+  description: 'For each country: applications sent, rejection emails, jobs with no answer yet and positive replies. Remote jobs with no listed country are one row.',
+  fn: (applications, replies) => {
+    const good = ['screening', 'interview', 'offer', 'test', 'assessment', 'recruiter_reply'];
+    const m = new Map();
+    const row = (c) => { if (!m.has(c)) m.set(c, {country: c, applications: 0, rejected: 0, waiting: 0, positive: 0}); return m.get(c); };
+    applications.forEach((a) => { const r = row(a.map || 'Remote'); const s = String(a.status).toLowerCase(); r.applications += 1; if (good.includes(s)) r.positive += 1; else if (s !== 'rejected') r.waiting += 1; });
+    replies.forEach((x) => { if (x.outcome === 'rejected' && x.map) row(x.map).rejected += 1; });
+    return [...m.values()].sort((a, b) => b.applications - a.applications || b.rejected - a.rejected);
+  },
+});
+dash.calc('map_totals', {
+  inputs: ['map_by_country', 'replies'], title: 'Map totals', description: 'Countries reached, applications on the map, and rejections with and without a known country.',
+  fn: (map_by_country, replies) => {
+    const onMap = map_by_country.filter((r) => r.country !== 'Remote');
+    const remote = map_by_country.find((r) => r.country === 'Remote');
+    return [{
+      countries: onMap.filter((r) => r.applications > 0).length,
+      on_map: onMap.reduce((n, r) => n + r.applications, 0),
+      remote: remote ? remote.applications : 0,
+      rejected_placed: map_by_country.reduce((n, r) => n + r.rejected, 0),
+      rejected_unplaced: replies.filter((x) => x.outcome === 'rejected' && !x.map).length,
+    }];
+  },
+});
+const MAP = {metric: 'applications', sel: null, view: 'all', moved: false, made: null};
+const MAP_METRIC = {
+  applications: {name: 'Applications', one: 'application', many: 'applications', ramp: ['#17384f', '#4fc3f7']},
+  rejected: {name: 'Rejections', one: 'rejection', many: 'rejections', ramp: ['#4a1f26', '#ff7b72']},
+  waiting: {name: 'No answer yet', one: 'with no answer yet', many: 'with no answer yet', ramp: ['#473714', '#f5b942']},
+  positive: {name: 'Positive replies', one: 'positive reply', many: 'positive replies', ramp: ['#153f2e', '#4ade80']},
+};
+const MAP_VIEWS = {all: [-14, 10, 66, 66], gulf: [33, 12, 62, 33], europe: [-12, 35, 32, 66], world: null};
+function mapProject(lon, lat) {
+  const l = lon * Math.PI / 180, p = lat * Math.PI / 180, p2 = p * p, p4 = p2 * p2, s = 1000 / (2 * 0.8707 * Math.PI);
+  const x = l * (0.8707 - 0.131979 * p2 + p4 * (-0.013791 + p4 * (0.003971 * p2 - 0.001529 * p4)));
+  const y = p * (1.007226 + p2 * (0.015085 + p4 * (-0.044475 + 0.028874 * p2 - 0.005916 * p4)));
+  return [500 + x * s, 250 - y * s];
+}
+const mapRowsOk = () => { const r = dash.data('map_by_country'); return r.status === 'ok' ? r.data : []; };
+const mapPick = () => { const rows = [...mapRowsOk()].sort((a, b) => b[MAP.metric] - a[MAP.metric] || b.applications - a.applications); return MAP.sel || (rows[0] && rows[0].country) || null; };
+const mapRejected = (name) => { const r = dash.data('replies'); return r.status === 'ok' ? r.data.filter((x) => x.outcome === 'rejected' && x.map === name) : []; };
+function openRejection(id) { RS.sel = id; showTab('rejected'); dash.draw('rejRows'); dash.draw('rejDetail'); }
+function mapSelect(name, zoomThere) {
+  MAP.sel = name;
+  ['worldMap', 'mapRows', 'mapDetail'].forEach((n) => dash.draw(n));
+  if (zoomThere && MAP.made) MAP.made.zoomToCountry(name);
+}
+function mapColor(rows) {
+  const max = d3.max(rows, (r) => r[MAP.metric]) || 1;
+  return d3.scaleSqrt().domain([1, Math.max(2, max)]).range(MAP_METRIC[MAP.metric].ramp).interpolate(d3.interpolateRgb);
+}
+dash.draw('worldMap', {
+  mount(el) {
+    const svg = d3.select(el).append('svg').attr('role', 'img').attr('aria-labelledby', 'map-title');
+    const root = svg.append('g');
+    const land = root.append('g').attr('class', 'land');
+    const leaders = svg.append('g').attr('class', 'leaders');
+    const bubbles = svg.append('g');
+    const tip = d3.select(el).append('div').attr('class', 'jh-map-tip').attr('hidden', '');
+    const made = {W: 0, H: 0, t: d3.zoomIdentity, nodes: [], shapes: new Map(), drawn: false};
+    const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const go = (t) => { (reduced() ? svg : svg.transition().duration(550)).call(zoom.transform, t); };
+    const fitBox = (x0, y0, x1, y1, pad, cap) => {
+      const k = Math.min(cap || Infinity, Math.min(made.W / (x1 - x0), made.H / (y1 - y0)) * pad);
+      return d3.zoomIdentity.translate(made.W / 2, made.H / 2).scale(k).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+    };
+    const viewT = (name) => {
+      const v = MAP_VIEWS[name];
+      if (!v) return fitBox(0, 0, 1000, 440, 0.98);
+      const a = mapProject(v[0], v[3]), b = mapProject(v[2], v[1]), c = mapProject(v[0], v[1]);
+      return fitBox(Math.min(a[0], c[0]), a[1], Math.max(b[0], mapProject(v[2], v[3])[0]), b[1], 0.96);
+    };
+    const place = () => {
+      const t = made.t, nodes = made.nodes;
+      nodes.forEach((n) => { n.ax = t.applyX(n.cx); n.ay = t.applyY(n.cy); n.x = n.ax; n.y = n.ay; });
+      for (let pass = 0; pass < 28; pass += 1) {
+        for (let i = 0; i < nodes.length; i += 1) for (let j = i + 1; j < nodes.length; j += 1) {
+          const a = nodes[i], b = nodes[j], dx = (b.x - a.x) || 0.5, dy = (b.y - a.y) || 0.5, d = Math.hypot(dx, dy), need = a.r + b.r + 3;
+          if (d < need) { const push = (need - d) / 2 / d; a.x -= dx * push; a.y -= dy * push; b.x += dx * push; b.y += dy * push; }
+        }
+      }
+      bubbles.selectAll('.bub').attr('transform', (n) => `translate(${n.x},${n.y})`);
+      leaders.selectAll('line').attr('x1', (n) => n.ax).attr('y1', (n) => n.ay).attr('x2', (n) => n.x).attr('y2', (n) => n.y).attr('hidden', (n) => (Math.hypot(n.x - n.ax, n.y - n.ay) > n.r ? null : ''));
+    };
+    const zoom = d3.zoom().clickDistance(4).on('zoom', (ev) => {
+      made.t = ev.transform; root.attr('transform', ev.transform); place();
+      if (ev.sourceEvent) { MAP.moved = true; tip.attr('hidden', ''); }
+    });
+    svg.call(zoom);
+    made.size = (W, H) => {
+      if (W === made.W && H === made.H) return;
+      made.W = W; made.H = H;
+      svg.attr('viewBox', `0 0 ${W} ${H}`);
+      const min = Math.min(W / 1000, H / 440) * 0.8;
+      zoom.extent([[0, 0], [W, H]]).scaleExtent([min, min * 60]).translateExtent([[-200, -120], [1200, 560]]);
+      if (!MAP.moved) svg.call(zoom.transform, viewT(MAP.view));
+    };
+    made.goView = (name) => { MAP.moved = false; go(viewT(name)); };
+    made.zoomBy = (f) => { MAP.moved = true; (reduced() ? svg : svg.transition().duration(250)).call(zoom.scaleBy, f); };
+    made.zoomToCountry = (name) => { const s = made.shapes.get(name); if (s) { MAP.moved = true; go(fitBox(s.x0, s.y0, s.x1, s.y1, 0.5, Math.min(made.W / 1000, made.H / 440) * 30)); } };
+    made.showTip = (ev, name, row) => {
+      const m = row || {applications: 0, rejected: 0, waiting: 0, positive: 0};
+      tip.selectAll('*').remove();
+      tip.append('b').text(name);
+      tip.append('span').text(`${fmtInt(m.applications)} applications`);
+      tip.append('span').text(`${fmtInt(m.rejected)} rejections`);
+      tip.append('span').text(`${fmtInt(m.waiting)} with no answer yet`);
+      tip.append('span').text(`${fmtInt(m.positive)} positive replies`);
+      const who = [...new Set(mapRejected(name).map((x) => x.company))];
+      if (who.length) tip.append('em').text(`Rejected by: ${who.slice(0, 8).join(', ')}${who.length > 8 ? ` and ${who.length - 8} more` : ''}`);
+      tip.attr('hidden', null);
+      const box = el.getBoundingClientRect(), node = tip.node(), tw = node.offsetWidth, th = node.offsetHeight;
+      const x = ev.clientX - box.left, y = ev.clientY - box.top;
+      tip.style('left', `${Math.max(8, Math.min(box.width - tw - 8, x + 14))}px`).style('top', `${Math.max(8, Math.min(box.height - th - 8, y + 14))}px`);
+    };
+    made.hideTip = () => tip.attr('hidden', '');
+    made.draw = (world, rows) => {
+      const byName = new Map(rows.map((r) => [r.country, r]));
+      if (!made.drawn && world.length) {
+        world.forEach((c) => made.shapes.set(c.name, c));
+        land.selectAll('path').data(world, (c) => c.name).join('path').attr('d', (c) => c.d)
+          .on('click', (ev, c) => mapSelect(c.name, false))
+          .on('mousemove', (ev, c) => made.showTip(ev, c.name, made.byName.get(c.name)))
+          .on('mouseleave', () => made.hideTip());
+        made.drawn = true;
+      }
+      made.byName = byName;
+      const color = mapColor(rows), sel = mapPick(), metric = MAP.metric;
+      land.selectAll('path').attr('style', (c) => { const r = byName.get(c.name); return r && r[metric] > 0 ? `fill:${color(r[metric])}` : null; }).classed('is-sel', (c) => c.name === sel);
+      const max = d3.max(rows, (r) => r[metric]) || 1;
+      const size = d3.scaleSqrt().domain([1, Math.max(2, max)]).range([11, 24]);
+      made.nodes = rows.filter((r) => r[metric] > 0 && made.shapes.has(r.country)).map((r) => { const s = made.shapes.get(r.country); return {name: r.country, v: r[metric], r: size(r[metric]), cx: s.cx, cy: s.cy, row: r}; });
+      leaders.selectAll('line').data(made.nodes, (n) => n.name).join('line');
+      const g = bubbles.selectAll('.bub').data(made.nodes, (n) => n.name).join((e) => { const b = e.append('g').attr('class', 'bub'); b.append('circle'); b.append('text'); return b; });
+      g.on('click', (ev, n) => mapSelect(n.name, false)).on('mousemove', (ev, n) => made.showTip(ev, n.name, n.row)).on('mouseleave', () => made.hideTip());
+      g.select('circle').attr('r', (n) => n.r).attr('stroke', (n) => color(Math.max(n.v, Math.max(2, max) * 0.6)));
+      g.select('text').text((n) => fmtInt(n.v));
+      place();
+    };
+    MAP.made = made;
+    return made;
+  },
+  update(el, made) {
+    const w = dash.data('world'), r = dash.data('map_by_country');
+    made.size(el.clientWidth || 800, el.clientHeight || 500);
+    made.draw(w.status === 'ok' ? w.data : [], r.status === 'ok' ? r.data : []);
+  },
+  unmount() { MAP.made = null; },
+});
+dash.draw('mapLegend', (el) => {
+  const rows = mapRowsOk(), m = MAP_METRIC[MAP.metric]; el.replaceChildren();
+  if (!rows.length) { el.textContent = '—'; return; }
+  const max = d3.max(rows, (r) => r[MAP.metric]) || 0;
+  const name = document.createElement('span'); name.textContent = m.name;
+  const low = document.createElement('span'); low.textContent = max ? '1' : '0';
+  const bar = document.createElement('i'); bar.style.background = `linear-gradient(90deg, ${m.ramp[0]}, ${m.ramp[1]})`;
+  const high = document.createElement('span'); high.textContent = fmtInt(max);
+  el.append(name, low, bar, high);
+});
+dash.draw('mapKpi', (el) => { const k = dash.data('map_totals'); el.textContent = k.status === 'ok' && k.data.length ? fmtInt(k.data[0][el.dataset.field]) : '—'; });
+dash.draw('mapRows', (tb) => {
+  const rows = [...mapRowsOk()].sort((a, b) => b[MAP.metric] - a[MAP.metric] || b.applications - a.applications), sel = mapPick();
+  tb.replaceChildren();
+  rows.forEach((r) => {
+    const tr = document.createElement('tr'); tr.dataset.key = r.country; if (r.country === sel) tr.className = 'is-sel';
+    [r.country, r.applications, r.rejected, r.waiting, r.positive].forEach((v) => { const td = document.createElement('td'); td.textContent = typeof v === 'number' ? fmtInt(v) : v; tr.append(td); });
+    tr.tabIndex = 0;
+    tr.addEventListener('click', () => mapSelect(r.country, true));
+    tr.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') mapSelect(r.country, true); });
+    tb.append(tr);
+  });
+});
+dash.draw('mapDetail', (el) => {
+  const name = mapPick(), a = dash.data('applications'), rp = dash.data('replies'); el.replaceChildren();
+  const row = mapRowsOk().find((r) => r.country === name) || null;
+  if (!name || a.status !== 'ok' || rp.status !== 'ok') { el.textContent = '—'; return; }
+  const add = (tag, text, cls) => { const n = document.createElement(tag); n.textContent = text; if (cls) n.className = cls; el.append(n); return n; };
+  add('h2', name === 'Remote' ? 'Remote, no listed country' : name);
+  const jobs = a.data.filter((x) => (x.map || 'Remote') === name), rej = rp.data.filter((x) => x.outcome === 'rejected' && x.map === name);
+  const m = row || {applications: 0, rejected: 0, waiting: 0, positive: 0};
+  const dl = add('dl', '', 'jh-facts');
+  const ai = jobs.filter((x) => x.track === 'AI').length;
+  const chan = d3.rollups(jobs, (v) => v.length, (x) => x.channel).sort((p, q) => q[1] - p[1]).slice(0, 3).map(([c, n]) => `${c} ${fmtInt(n)}`).join(', ');
+  [['Applications', fmtInt(m.applications)], ['No answer yet', fmtInt(m.waiting)], ['Positive replies', fmtInt(m.positive)], ['Rejection emails', fmtInt(m.rejected)], ['Top channels', chan || 'None']].forEach(([k, v]) => {
+    const dt = document.createElement('dt'); dt.textContent = k; const dd = document.createElement('dd'); dd.textContent = v; dl.append(dt, dd);
+  });
+  if (!jobs.length && !rej.length) { add('p', 'No applications or rejections in this country so far.', 'jh-note'); return; }
+  const drawJobs = () => {
+    if (!jobs.length) return;
+    add('h3', `Applications (${fmtInt(jobs.length)})`);
+    const box = add('div', '', 'jh-mapjobs');
+    [...jobs].sort((p, q) => (p.date < q.date ? 1 : -1)).forEach((x) => {
+      const b = document.createElement('button'); b.type = 'button';
+      const co = document.createElement('b'); co.textContent = x.company;
+      const ro = document.createElement('span'); ro.className = 'jh-muted'; ro.textContent = `${x.role} · ${fmtShort(x.date)}`;
+      b.append(co, ro); b.addEventListener('click', () => { showTab('applications'); select(x.url); }); box.append(b);
+    });
+  };
+  const drawRej = () => {
+    if (!rej.length) return;
+    add('h3', `Rejected by (${fmtInt(rej.length)})`);
+    const box = add('div', '', 'jh-mapjobs');
+    rej.forEach((x) => {
+      const b = document.createElement('button'); b.type = 'button';
+      const co = document.createElement('b'); co.textContent = x.company;
+      const ro = document.createElement('span'); ro.className = 'jh-muted'; ro.textContent = `${x.role} · ${fmtShort(x.date)}`;
+      b.append(co, ro); b.addEventListener('click', () => openRejection(x.id)); box.append(b);
+    });
+  };
+  drawRej(); drawJobs();
+});
+dash.draw('mapRejRows', (tb) => {
+  const r = dash.data('replies'); tb.replaceChildren();
+  if (r.status !== 'ok') return;
+  const rows = r.data.filter((x) => x.outcome === 'rejected').sort((a, b) => (a.date < b.date ? 1 : -1));
+  rows.forEach((x) => {
+    const tr = document.createElement('tr'); tr.dataset.key = x.id; tr.tabIndex = 0;
+    [x.company, x.role, x.map || 'Not stated', fmtShort(x.date), x.reason].forEach((v, i) => { const td = document.createElement('td'); td.textContent = v; if (i === 1 || i === 4) td.className = 'jh-hide-narrow'; tr.append(td); });
+    tr.addEventListener('click', () => openRejection(x.id));
+    tr.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') openRejection(x.id); });
+    tb.append(tr);
+  });
+});
+document.querySelectorAll('[data-map-metric]').forEach((btn) => btn.addEventListener('click', () => {
+  MAP.metric = btn.dataset.mapMetric;
+  document.querySelectorAll('[data-map-metric]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+  ['worldMap', 'mapLegend', 'mapRows', 'mapDetail'].forEach((n) => dash.draw(n));
+}));
+document.querySelectorAll('[data-map-view]').forEach((btn) => btn.addEventListener('click', () => {
+  MAP.view = btn.dataset.mapView;
+  document.querySelectorAll('[data-map-view]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+  if (MAP.made) MAP.made.goView(MAP.view);
+}));
+document.querySelectorAll('[data-map-zoom]').forEach((btn) => btn.addEventListener('click', () => {
+  if (!MAP.made) return;
+  if (btn.dataset.mapZoom === 'reset') MAP.made.goView(MAP.view); else MAP.made.zoomBy(btn.dataset.mapZoom === 'in' ? 1.7 : 1 / 1.7);
+}));
+const startTab = location.hash.slice(1);
+if (['overview', 'map', 'applications', 'rejected', 'waiting'].includes(startTab)) showTab(startTab);
+</script>

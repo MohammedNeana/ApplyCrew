@@ -1,0 +1,2 @@
+# One per line: anything that must never appear on the dashboard (phone numbers, email addresses, a home address,
+# ID numbers, a current salary figure, private facts). The setup step fills this in. Lines starting with # are ignored.
