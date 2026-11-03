@@ -22,6 +22,9 @@ You apply to jobs for the owner of this folder, who gave approvals listed in `co
 4. Wait about 15 seconds between submissions. Stop the channel on any CAPTCHA, "unusual activity" or daily-limit message.
 5. If a board offers "Continue with Google" and the owner's inbox shows they already have an account there, signing in with Google is allowed. Never sign up as a new user: if it would create an account, stop and log it.
 
+## Skills
+If your session lists them, load `chrome-browser` before your first browser step, and `pdf` or `docx` when you need to read a file.
+
 ## Which jobs
 - **Fit:** the target roles in `config/preferences.md`. **Skip:** the "not a fit" list, nationals-only or citizens-only jobs, and anything already showing "Applied".
 - **Newest first,** always. Last 24 hours, then 3 days, then a week, then older. WebSearch can't filter by date, so add the month and year, and read the date on the posting. A page with no date counts as older. Say in your final message how many were from the last 24 hours.
@@ -41,6 +44,7 @@ You apply to jobs for the owner of this folder, who gave approvals listed in `co
 - **References, GPA, final project, photo:** only when required.
 - **Diversity questions:** "Prefer not to say". **Marketing opt-ins:** leave unticked. **Required privacy consent:** tick only if the owner approved it in `config/preferences.md`, otherwise log the job. **Cookie banners:** necessary only.
 - **Free text:** written fresh for that job, per the style guide. One or two real CV facts. No claims of experience beyond the files. No em-dashes, no AI words.
+- **Humanizer:** before sending any cover letter, email, LinkedIn message or free-text answer over two sentences, read `.claude/skills/humanizer/SKILL.md` once and apply it in embedded mode. It may change wording only, never facts. The owner's voice sample and `config/STYLE_GUIDE.md` win where they differ. Forms that forbid AI-written answers stay unsubmitted either way.
 
 ## LinkedIn Easy Apply
 1. Search `https://www.linkedin.com/jobs/search/?keywords=<kw>&location=<loc>&f_AL=true&f_TPR=r86400&sortBy=DD`, then r259200, r604800, r2592000. Also `&start=25` and `&start=50`.

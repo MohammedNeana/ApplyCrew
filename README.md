@@ -72,6 +72,8 @@ There's no server and no sign-up for this project. Your CVs, answers and records
 
 **What if I stop halfway?** Type `Start` again. It picks up where you left off.
 
+**Do I need to install any skills?** No. [Humanizer](https://github.com/blader/humanizer) comes in the folder, for more natural letters and emails. The PDF, Word and browser skills normally come with the Claude app, and setup checks for them.
+
 **Can I change my mind later?** Yes. Say "Add France", "Pause" or "How's it going?" in the chat.
 
 ## Help make it better
@@ -82,4 +84,4 @@ If this saves you time, a star helps other job seekers find it.
 
 ---
 
-<sub>An independent open source project, not affiliated with or endorsed by Anthropic, LinkedIn or any job site. MIT licensed. Map outlines from Natural Earth through world-atlas.</sub>
+<sub>An independent open source project, not affiliated with or endorsed by Anthropic, LinkedIn or any job site. MIT licensed. Map outlines from Natural Earth through world-atlas. Includes Humanizer by Siqi Chen (MIT).</sub>
