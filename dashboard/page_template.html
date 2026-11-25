@@ -125,9 +125,51 @@
   .jh-bar-fill { animation: jh-grow var(--cds-dur-slow) var(--cds-ease-out) both; transform-origin: left; }
   @keyframes jh-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 }
+/* Suite nav shared with Sterling and Ashford */
+.jh-suite { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 4px; font-size: var(--cds-font-size-caption); margin-bottom: calc(var(--cds-gap-sm) * -1); }
+.jh-suite a, .jh-suite .here { padding: 4px 10px; border-radius: 999px; border: 1px solid transparent; color: var(--color-fg); text-decoration: none; font-weight: var(--cds-font-weight-medium); }
+.jh-suite a:hover { border-color: var(--color-border-line); background: var(--color-panel); }
+.jh-suite a:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.jh-suite .here { background: var(--color-fg); color: var(--color-bg); }
+.jh-suite small { font-weight: 400; opacity: .75; font-size: inherit; }
+/* Sterling's note: the pre-written card at the top (dataset "briefing") */
+.st-note { --st-brass: color-mix(in oklab, #b08d57 76%, var(--color-fg)); background: var(--color-panel); border: 1px solid var(--color-border-line); border-left: 3px solid var(--st-brass); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--cds-gap-sm) var(--cds-gap-md); align-items: start; min-width: 0; }
+.st-mono { width: 2.25rem; height: 2.25rem; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-anthropic-serif); font-size: 1.2rem; line-height: 1; color: var(--st-brass); border: 1.5px solid var(--st-brass); box-shadow: inset 0 0 0 2px var(--color-panel), inset 0 0 0 3px color-mix(in oklab, var(--st-brass) 40%, transparent); user-select: none; }
+.st-body { display: grid; gap: var(--cds-gap-xs); min-width: 0; }
+.st-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px var(--cds-gap-md); }
+.st-title { margin: 0; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); letter-spacing: .08em; text-transform: uppercase; color: var(--st-brass); }
+.st-ask { font-size: var(--cds-font-size-caption); color: var(--color-fg); text-decoration: underline; text-decoration-color: var(--st-brass); text-underline-offset: 3px; white-space: nowrap; }
+.st-links { display: inline-flex; gap: var(--cds-gap-md); flex-wrap: wrap; }
+.st-ask:hover { color: var(--st-brass); }
+.st-ask:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.st-lead { margin: 0; font-family: var(--font-anthropic-serif); font-size: var(--cds-font-size-heading); line-height: 1.35; text-wrap: pretty; overflow-wrap: anywhere; }
+.st-lead .st-hi { font-style: italic; }
+.st-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.st-list li { position: relative; padding-left: 1.1rem; overflow-wrap: anywhere; }
+.st-list li::before { content: ""; position: absolute; left: 2px; top: .58em; width: 7px; height: 7px; border-radius: 50%; background: var(--st-mark, var(--color-fg-muted)); }
+.st-list li.k-good { --st-mark: var(--color-ok); }
+.st-list li.k-news { --st-mark: var(--st-brass); }
+.st-list li.k-count { --st-mark: var(--color-fg-muted); }
+.st-list li.k-waiting { --st-mark: var(--color-warn); }
+.st-list li.k-decline::before { background: transparent; box-shadow: inset 0 0 0 1.5px var(--color-fg-muted); }
+.st-foot { margin: 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+@media (max-width: 480px) { .st-note { padding: var(--cds-pad-md); gap: var(--cds-gap-xs) var(--cds-gap-sm); } .st-mono { width: 1.9rem; height: 1.9rem; font-size: 1rem; } }
+.jh [hidden] { display: none !important; }
 </style>
 
 <div class="jh">
+{{SUITE_NAV}}
+  <aside class="st-note" id="sterling-note" aria-labelledby="sterling-title" hidden>
+    <div class="st-mono" aria-hidden="true">S</div>
+    <div class="st-body">
+      <div class="st-top">
+        <h2 class="st-title" id="sterling-title">Sterling's note</h2>
+      </div>
+      <p class="st-lead"><span data-draw="stGreeting" data-source="briefing" data-field="greeting" data-row="0">—</span> <span class="st-hi" data-draw="stHeadline" data-source="briefing" data-field="headline" data-row="0">—</span></p>
+      <ul class="st-list" data-draw="stItems" data-source="briefing"></ul>
+      <p class="st-foot">Written <time data-draw="stWritten" data-source="briefing">—</time></p>
+    </div>
+  </aside>
   <header class="jh-head">
     <h1 class="jh-title" id="top">{{OWNER}}'s job hunt</h1>
     <p class="jh-lede"><b data-draw="kpi" data-source="kpis" data-field="total">—</b> applications sent so far, <b data-draw="kpi" data-source="kpis" data-field="gulf">—</b> of them in {{FOCUS_LABEL}}. <b data-draw="kpi" data-source="kpis" data-field="interviews">—</b> replies or interviews so far, and <b data-draw="kpi" data-source="kpis" data-field="rejected">—</b> rejections.</p>
@@ -207,6 +249,7 @@
         <option value="applied">No answer yet</option>
         <option value="replied">Replied, needs a look</option>
         <option value="rejected">Rejected</option>
+        <option value="bounced">Email not delivered</option>
       </select>
       <button class="jh-chip" type="button" data-track="" aria-pressed="true">All roles</button>
     </div>
@@ -402,7 +445,7 @@ const fmtInt = d3.format(',');
 const fmtDay = (s) => (s ? d3.utcFormat('%b %-d, %Y')(new Date(s + 'T00:00:00Z')) : '—');
 const fmtShort = (s) => (s ? d3.utcFormat('%b %-d')(new Date(s + 'T00:00:00Z')) : '');
 const state = {tab: 'overview', q: '', status: '', track: '', country: '', sort: 'date', dir: -1, sel: null};
-const STATUS = {applied: ['Applied', 'muted'], interview: ['Interview', 'ok'], screening: ['Screening', 'ok'], test: ['Test', 'ok'], assessment: ['Assessment', 'ok'], offer: ['Offer', 'ok'], recruiter_reply: ['Recruiter replied', 'ok'], rejected: ['Rejected', 'bad'], received: ['Confirmed received', 'muted']};
+const STATUS = {applied: ['Applied', 'muted'], interview: ['Interview', 'ok'], screening: ['Screening', 'ok'], test: ['Test', 'ok'], assessment: ['Assessment', 'ok'], offer: ['Offer', 'ok'], recruiter_reply: ['Recruiter replied', 'ok'], rejected: ['Rejected', 'bad'], received: ['Confirmed received', 'muted'], bounced: ['Email not delivered', 'muted']};
 function pill(s) { const [t, c] = STATUS[String(s || 'applied').toLowerCase()] || [s, 'muted']; const el = document.createElement('span'); el.className = 'jh-pill ' + c; el.textContent = t; return el; }
 
 dash.draw('kpi', (el) => { const k = dash.data('kpis'); el.textContent = k.status === 'ok' && k.data.length ? fmtInt(k.data[0][el.dataset.field]) : '—'; });
@@ -476,7 +519,7 @@ function filtered() {
   const r = dash.data('applications'); if (r.status !== 'ok') return [];
   const q = state.q.trim().toLowerCase();
   return r.data
-    .filter((a) => { const s = String(a.status || 'applied').toLowerCase(); return !state.status || (state.status === 'replied' ? !['applied', 'rejected'].includes(s) : s === state.status); })
+    .filter((a) => { const s = String(a.status || 'applied').toLowerCase(); return !state.status || (state.status === 'replied' ? !['applied', 'rejected', 'bounced'].includes(s) : s === state.status); })
     .filter((a) => !state.track || a.track === state.track)
     .filter((a) => !state.country || a.country === state.country)
     .filter((a) => !q || [a.company, a.role, a.location].join(' ').toLowerCase().includes(q))
@@ -854,4 +897,34 @@ document.querySelectorAll('[data-map-zoom]').forEach((btn) => btn.addEventListen
 }));
 const startTab = location.hash.slice(1);
 if (['overview', 'map', 'applications', 'rejected', 'waiting'].includes(startTab)) showTab(startTab);
+</script>
+
+<script>
+// Sterling's note: pre-written by scripts/sterling_brief.py on every refresh; shown only when the "briefing" dataset loads.
+dash.onData(() => {
+  const b = dash.data('briefing');
+  const show = b.status === 'ok' && Array.isArray(b.data) && b.data.length > 0;
+  document.querySelectorAll('#sterling-note').forEach((c) => { c.hidden = !show; });
+});
+const stRow = () => { const b = dash.data('briefing'); return b.status === 'ok' && b.data.length ? b.data : null; };
+dash.draw('stGreeting', (el) => { const r = stRow(); el.textContent = r ? String(r[0].greeting || '') : '—'; });
+dash.draw('stHeadline', (el) => { const r = stRow(); el.textContent = r ? String(r[0].headline || '') : '—'; });
+dash.draw('stItems', (el) => {
+  const r = stRow();
+  const kinds = new Set(['good', 'news', 'count', 'waiting', 'decline']);
+  el.replaceChildren(...(r || []).slice().sort((a, b) => Number(a.n) - Number(b.n)).slice(0, 6).map((x) => {
+    const li = document.createElement('li');
+    const k = String(x.kind || '');
+    li.className = kinds.has(k) ? 'k-' + k : 'k-count';
+    li.textContent = String(x.text || '');
+    return li;
+  }));
+});
+dash.draw('stWritten', (el) => {
+  const r = stRow();
+  const d = r ? new Date(String(r[0].generated_at || '')) : null;
+  if (!d || isNaN(d)) { el.textContent = '—'; el.removeAttribute('datetime'); return; }
+  el.setAttribute('datetime', d.toISOString());
+  el.textContent = d3.timeFormat('%-d %b, %H:%M')(d);
+});
 </script>

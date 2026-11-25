@@ -1,2 +1,3 @@
-# One per line: anything that must never appear on the dashboard (phone numbers, email addresses, a home address,
-# ID numbers, a current salary figure, private facts). The setup step fills this in. Lines starting with # are ignored.
+# One per line: anything that must never appear on the dashboard or the companion pages (phone numbers, email addresses,
+# a home address, ID numbers, a current salary figure, private facts). The setup step fills this in. Lines starting with # are ignored.
+# Put a salary figure on its own line, digits only: then 12000, 12,000 and 12 000 are all caught.

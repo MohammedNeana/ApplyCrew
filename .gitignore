@@ -12,3 +12,6 @@
 /dashboard/index_doc.json
 .DS_Store
 __pycache__/
+/dashboard/briefing.json
+/sterling/sterling_data.json
+/ashford/preps/

@@ -1,0 +1,301 @@
+<title>Ashford</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a coach's war room. Header, tab rail of invitations, then the selected prep pack; one column throughout, cheat sheet first. */
+:root {
+  --bg: #f2f3f6;
+  --paper: #ffffff;
+  --ink: #141b2d;
+  --muted: #5b6377;
+  --rule: #d8dbe3;
+  --navy: #1c2a4a;
+  --silver: #8a93a6;
+  --oxblood: #7a2331;
+  --oxblood-soft: #f5e7e9;
+  --good: #2c6b45;
+  --warn: #8a5a12;
+  --display: "DM Serif Display", "Didot", Georgia, serif;
+  --body: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1220; --paper: #151c2e; --ink: #e7eaf2; --muted: #9aa3b8; --rule: #283149;
+    --navy: #a9b8dc; --silver: #8d97ad; --oxblood: #e0828f; --oxblood-soft: #2d1a20; --good: #7ec79a; --warn: #e3b366;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1220; --paper: #151c2e; --ink: #e7eaf2; --muted: #9aa3b8; --rule: #283149;
+  --navy: #a9b8dc; --silver: #8d97ad; --oxblood: #e0828f; --oxblood-soft: #2d1a20; --good: #7ec79a; --warn: #e3b366;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 28px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; padding-bottom: 18px; border-bottom: 2px solid var(--navy); }
+.mono-a { width: 54px; height: 54px; flex: none; display: grid; place-items: center; background: var(--navy); color: var(--paper); font-family: var(--display); font-size: 30px; border-radius: 4px; }
+.who { flex: 1; min-width: 0; }
+h1 { font-family: var(--display); font-weight: 400; font-size: clamp(30px, 4.5vw, 44px); line-height: 1; margin: 0; text-wrap: balance; }
+.tag { margin: 6px 0 0; color: var(--muted); }
+.suite { display: flex; gap: 4px; flex-wrap: wrap; font-size: 14px; align-items: center; }
+.suite a, .suite .here { padding: 5px 10px; border-radius: 4px; text-decoration: none; color: var(--navy); font-weight: 600; border: 1px solid transparent; }
+.suite a:hover { border-color: var(--rule); background: var(--paper); }
+.suite .here { color: var(--paper); background: var(--navy); }
+.suite small { font-weight: 400; opacity: .8; font-size: 12px; }
+a:focus-visible, button:focus-visible, textarea:focus-visible, summary:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.rail { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
+.tab { font: inherit; font-size: 14px; display: flex; gap: 8px; align-items: center; background: var(--paper); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 12px; cursor: pointer; text-align: left; }
+.tab[aria-selected="true"] { border-color: var(--navy); box-shadow: inset 0 -3px 0 var(--navy); }
+.chip { font-family: var(--mono); font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; text-transform: lowercase; flex: none; }
+.chip.upcoming { color: var(--oxblood); }
+.chip.submitted { color: var(--warn); }
+.chip.done { color: var(--good); }
+.empty { display: grid; gap: 18px; }
+.lede { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; padding: 24px 28px; display: grid; gap: 8px; }
+.status-line { display: flex; gap: 8px; align-items: center; font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.status-line::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex: none; }
+.kit { display: grid; gap: 10px; }
+.kit h3 { margin: 0; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.empty h2 { font-family: var(--display); font-weight: 400; font-size: clamp(24px, 3.4vw, 30px); margin: 0; text-wrap: balance; }
+.empty p { margin: 0; max-width: 62ch; color: var(--muted); }
+.how { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 18px; }
+@media (max-width: 720px) { .how { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 440px) { .how { grid-template-columns: minmax(0, 1fr); } }
+.how div { border-top: 2px solid var(--silver); padding-top: 8px; font-size: 14.5px; min-width: 0; color: var(--muted); }
+.how b { display: block; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); margin-bottom: 2px; }
+.pack { display: grid; gap: 14px; }
+.packhead { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: baseline; }
+.packhead h2 { font-family: var(--display); font-weight: 400; font-size: 30px; margin: 0; min-width: 0; }
+.count { font-family: var(--mono); font-size: 14px; color: var(--oxblood); font-variant-numeric: tabular-nums; }
+.cheat { background: var(--navy); color: var(--paper); border-radius: 6px; padding: 18px 20px; }
+.cheat h3 { font-family: var(--display); font-weight: 400; font-size: 22px; margin: 0 0 8px; }
+.cheat ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+details { background: var(--paper); border: 1px solid var(--rule); border-radius: 6px; }
+summary { cursor: pointer; padding: 12px 16px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-family: var(--mono); color: var(--muted); }
+details[open] summary::after { content: "–"; }
+.body { padding: 0 16px 16px; display: grid; gap: 12px; min-width: 0; }
+.qa { border-left: 3px solid var(--silver); padding-left: 12px; min-width: 0; }
+.qa .q { font-weight: 600; }
+.qa .why { font-size: 13.5px; color: var(--muted); }
+.qa .a { white-space: pre-wrap; overflow-wrap: anywhere; margin-top: 4px; }
+.mini { font: inherit; font-size: 13px; background: none; border: 0; color: var(--navy); padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.check label { display: flex; gap: 8px; align-items: flex-start; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+.tablebox { overflow-x: auto; }
+td, th { border-bottom: 1px solid var(--rule); padding: 7px 8px; vertical-align: top; text-align: left; }
+th { font-size: 12.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.practice { background: var(--paper); border: 1px solid var(--rule); border-top: 3px solid var(--oxblood); border-radius: 6px; padding: 20px 24px; display: grid; gap: 12px; }
+.practice h3 { font-family: var(--display); font-weight: 400; font-size: 24px; margin: 0; color: var(--oxblood); }
+.practice-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.focus { border: 0; padding: 0; margin: 0; min-width: 0; }
+.focus legend { font-size: 13px; color: var(--muted); padding: 0; margin-bottom: 6px; }
+.focus-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.focus label { position: relative; }
+.focus input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.focus span { display: inline-block; font-size: 13.5px; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); cursor: pointer; }
+.focus input:checked + span { background: var(--oxblood-soft); border-color: var(--oxblood); color: var(--oxblood); font-weight: 600; }
+.focus input:focus-visible + span { outline: 2px solid var(--oxblood); outline-offset: 2px; }
+.coach { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.5em; font-size: 16.5px; }
+.coach:empty { display: none; }
+.coach.thinking { color: var(--muted); font-style: italic; }
+.tally { font-family: var(--mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.hint { font-size: 13px; color: var(--muted); }
+.loading { color: var(--muted); padding: 24px 0; font-style: italic; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+textarea { width: 100%; min-height: 96px; font: inherit; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); resize: vertical; }
+.btn { font: inherit; font-weight: 600; background: var(--oxblood); color: var(--paper); border: 0; border-radius: 4px; padding: 9px 18px; cursor: pointer; min-height: 40px; }
+.btn:hover:not(:disabled) { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--oxblood); border: 1px solid var(--oxblood); }
+.btn:disabled { opacity: .5; cursor: default; }
+.muted { color: var(--muted); font-size: 14px; }
+.sources a { color: var(--navy); overflow-wrap: anywhere; }
+@media (max-width: 560px) { header { gap: 12px; } .suite { width: 100%; } .wrap { padding-block: 18px 40px; } .lede, .practice { padding: 18px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="mono-a" aria-hidden="true">A</div>
+    <div class="who">
+      <h1>Ashford</h1>
+      <p class="tag">Your interview coach. When they invite you, I make sure you walk in ready.</p>
+    </div>
+    <nav class="suite" aria-label="Job hunt pages">
+      <a id="lDash" href="#" target="_blank" rel="noopener" hidden>Dashboard</a>
+      <a id="lSterling" href="#" target="_blank" rel="noopener" hidden>Sterling <small>briefing</small></a>
+      <span class="here" aria-current="page">Ashford <small>coach</small></span>
+    </nav>
+  </header>
+
+  <nav class="rail" id="rail" aria-label="Invitations" role="tablist"></nav>
+  <main id="main">
+    <section class="empty" id="empty">
+      <div class="lede">
+        <p class="status-line">All clear</p>
+        <h2>No interviews waiting.</h2>
+        <p>Nobody has invited you to an interview, assessment or screening that still needs you. The moment an invitation lands in your inbox, or you tell Claude about one in chat, I'll open a tab here with a full prep pack.</p>
+      </div>
+      <div class="practice" id="warm">
+        <div class="practice-head"><h3>Warm-up round</h3><span class="tally" id="wTally" aria-live="polite"></span></div>
+        <p class="muted" id="wIntro">No invitation yet, so let's keep you sharp. Pick a focus, and I'll ask the kind of question people in your field get.</p>
+        <fieldset class="focus" id="wFocus">
+          <legend>Focus</legend>
+          <div class="focus-row">
+          <label><input type="radio" name="wf" value="" checked><span>Anything</span></label>
+          <label><input type="radio" name="wf" value="the core skills of the role"><span>Role skills</span></label>
+          <label><input type="radio" name="wf" value="a practical problem from day-to-day work in the role"><span>Problem solving</span></label>
+          <label><input type="radio" name="wf" value="behavioral, using the STAR format"><span>Behavioral</span></label>
+          <label><input type="radio" name="wf" value="motivation: why this field, why this company"><span>Motivation</span></label>
+          <label><input type="radio" name="wf" value="a screening call with a recruiter"><span>Screening call</span></label>
+          </div>
+        </fieldset>
+        <div class="coach" id="wq" aria-live="polite"></div>
+        <label for="wa" class="sr">Your answer</label>
+        <textarea id="wa" placeholder="Type your answer…" hidden></textarea>
+        <div class="row">
+          <button class="btn" id="wStart" type="button" disabled>Ask me a question</button>
+          <button class="btn ghost" id="wSend" type="button" hidden>Get feedback</button>
+          <button class="mini" id="wSay" type="button" hidden>Read aloud</button>
+        </div>
+        <p class="hint" id="wHint">Connecting to Claude…</p>
+      </div>
+      <div class="kit">
+        <h3>When an invitation arrives, you get</h3>
+        <div class="how">
+        <div><b>Cheat sheet</b>One page to read ten minutes before the call.</div>
+        <div><b>The company</b>What they build, their stack, and what candidates report about their interviews, with sources.</div>
+        <div><b>You vs. the role</b>Every requirement matched to your real experience, gaps handled honestly.</div>
+        <div><b>Questions</b>Likely technical and behavioral questions, with draft answers in your voice.</div>
+        <div><b>Practice</b>A mock interview: I ask, you answer, I tell you how to sharpen it.</div>
+        <div><b>Logistics</b>The time in your own time zone, a countdown, and a checklist.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const store = { get(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+  let sample = null, preps = [], current = null, busy = false, who = "";
+
+  function speak(text) {
+    try { const s = window.speechSynthesis; if (!s) return; s.cancel(); const u = new SpeechSynthesisUtterance(text);
+      const v = s.getVoices().find(v => /en-GB/i.test(v.lang)); if (v) u.voice = v; u.rate = 1; s.speak(u); } catch (e) {}
+  }
+  function countdown(deadline) {
+    if (!deadline) return "";
+    const t = Date.parse(deadline); if (isNaN(t)) return esc(deadline);
+    const ms = t - Date.now(); if (ms < 0) return "passed";
+    const d = Math.floor(ms / 86400000), h = Math.floor(ms % 86400000 / 3600000);
+    return (d ? d + "d " : "") + h + "h left";
+  }
+  function list(arr) { return "<ul>" + (arr || []).map(x => `<li>${esc(x)}</li>`).join("") + "</ul>"; }
+  function section(title, html, open) { return html ? `<details${open ? " open" : ""}><summary>${esc(title)}</summary><div class="body">${html}</div></details>` : ""; }
+
+  function renderRail() {
+    $("rail").innerHTML = preps.map(p => `<button class="tab" role="tab" type="button" data-slug="${esc(p.slug)}" aria-selected="${current === p.slug}"><span>${esc(p.company)} · ${esc(p.stage || "prep")}</span><span class="chip ${esc(p.status || "upcoming")}">${esc(p.status || "upcoming")}</span></button>`).join("");
+    const tabs = [...$("rail").querySelectorAll(".tab")];
+    tabs.forEach((b, i) => {
+      b.tabIndex = b.getAttribute("aria-selected") === "true" ? 0 : -1;
+      b.setAttribute("aria-controls", "main");
+      b.onclick = () => open(b.dataset.slug);
+      b.onkeydown = (e) => {
+        const k = e.key, n = tabs.length;
+        const j = k === "ArrowRight" ? (i + 1) % n : k === "ArrowLeft" ? (i - 1 + n) % n : k === "Home" ? 0 : k === "End" ? n - 1 : -1;
+        if (j < 0) return; e.preventDefault(); open(tabs[j].dataset.slug).then(() => { const t = $("rail").querySelectorAll(".tab")[j]; t && t.focus(); });
+      };
+    });
+    if (!tabs.some(t => t.tabIndex === 0) && tabs[0]) tabs[0].tabIndex = 0;
+  }
+
+  async function open(slug) {
+    current = slug; renderRail();
+    try { history.replaceState(null, "", "#" + slug); } catch (e) {}
+    let p;
+    $("main").innerHTML = "<p class='loading' role='status'>Opening the prep pack…</p>";
+    try { p = await fetch("preps/" + encodeURIComponent(slug) + ".json").then(r => { if (!r.ok) throw 0; return r.json(); }); }
+    catch (e) { $("main").innerHTML = "<p class='muted'>This prep pack couldn't be loaded. Reload the page.</p>"; return; }
+    const done = store.get("ashford:check:" + slug) || {};
+    const qs = (p.likely_questions || []).map((x, i) => `<div class="qa"><div class="q">${esc(x.q)}</div>${x.why ? `<div class="why">Why they ask: ${esc(x.why)}</div>` : ""}<div class="a" id="ans${i}">${esc(x.answer)}</div><button class="mini copy" type="button" data-i="${i}">Copy answer</button></div>`).join("");
+    const fit = (p.fit || []).length ? `<div class="tablebox"><table><thead><tr><th>They want</th><th>You have</th></tr></thead><tbody>${p.fit.map(f => `<tr><td>${esc(f.req)}</td><td>${esc(f.me)}</td></tr>`).join("")}</tbody></table></div>` : "";
+    const topics = (p.technical_topics || []).map(t => `<div class="qa"><div class="q">${esc(t.topic)}</div><div class="a">${esc(t.refresher)}</div></div>`).join("");
+    const checks = (p.logistics || []).map((c, i) => `<label><input type="checkbox" data-i="${i}" ${done[i] ? "checked" : ""}> <span>${esc(c)}</span></label>`).join("");
+    const src = (p.sources || []).map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.url)}</a></li>`).join("");
+    $("main").innerHTML = `<section class="pack">
+      <div class="packhead"><h2>${esc(p.company)}</h2><span class="muted">${esc(p.role)} · ${esc(p.stage)}</span><span class="chip ${esc(p.status)}">${esc(p.status)}</span><span class="count">${countdown(p.deadline)}</span></div>
+      ${p.deadline ? `<p class="muted">When: ${esc(p.deadline_text || p.deadline)}</p>` : ""}
+      <div class="cheat"><h3>Read this ten minutes before</h3>${list(p.cheat_sheet)}</div>
+      ${section("The company", list(p.brief), true)}
+      ${section("You vs. the role", fit)}
+      ${section("Likely questions and your answers", qs)}
+      ${section("Technical topics to refresh", topics)}
+      ${section("Take-home plan", (p.take_home_plan || []).length ? list(p.take_home_plan) : "")}
+      ${section("Questions to ask them", (p.questions_to_ask || []).length ? list(p.questions_to_ask) : "")}
+      ${section("Checklist", checks ? `<div class="check">${checks}</div>` : "")}
+      ${section("Sources", src ? `<ul class="sources">${src}</ul>` : "")}
+      <div class="practice" id="prac" hidden><div class="practice-head"><h3>Practice with Ashford</h3><span class="tally" id="pTally" aria-live="polite"></span></div><p class="muted">A mock interview built from this prep pack. I ask, you answer, I tell you how to sharpen it.</p><div class="coach" id="pq" aria-live="polite"></div><label for="pa" class="sr">Your answer</label><textarea id="pa" placeholder="Type your answer…" hidden></textarea><div class="row"><button class="btn" id="pStart" type="button">Ask me a question</button><button class="btn ghost" id="pSend" type="button" hidden>Get feedback</button><button class="mini" id="pSay" type="button" hidden>Read aloud</button></div><p class="hint" hidden id="pHint">Tip: Ctrl or ⌘ + Enter sends your answer.</p></div>
+    </section>`;
+    $("main").querySelectorAll(".copy").forEach(b => b.onclick = async () => { const t = $("ans" + b.dataset.i).textContent; try { await navigator.clipboard.writeText(t); b.textContent = "Copied"; } catch (e) { const r = document.createRange(); r.selectNodeContents($("ans" + b.dataset.i)); const s = getSelection(); s.removeAllRanges(); s.addRange(r); } });
+    $("main").querySelectorAll(".check input").forEach(c => c.onchange = () => { done[c.dataset.i] = c.checked; store.set("ashford:check:" + slug, done); });
+    packCtx = JSON.stringify(p).slice(0, 24000);
+    wirePractice({ box: "prac", q: "pq", a: "pa", start: "pStart", send: "pSend", say: "pSay", tally: "pTally", hint: "pHint" }, packCtx);
+  }
+  let packCtx = "";
+
+  const RULES = (ctx) => `You are Ashford, a sharp, warm, exacting interview coach with a classy British voice, coaching ${who || "a job seeker"}.
+${ctx ? "Use ONLY this prep pack as context about the company, the role and the candidate's background:\n" + ctx : "There is no specific invitation yet. Ask general interview questions (role skills, problem solving, behavioral, motivation). Do not assume any facts about the candidate's background or field."}
+Never invent facts about the candidate. Be specific and brief.`;
+
+  function wirePractice(ids, ctx) {
+    if (!sample) return;
+    const box = $(ids.box); if (!box) return; box.hidden = false;
+    let question = "", lastText = "", asked = 0, scores = [];
+    const q = $(ids.q), a = $(ids.a), start = $(ids.start), send = $(ids.send), say = $(ids.say);
+    start.disabled = false;
+    const hint = ids.hint && $(ids.hint); if (hint) { hint.hidden = true; hint.textContent = "Tip: Ctrl or ⌘ + Enter sends your answer."; }
+    const tally = () => { const t = ids.tally && $(ids.tally); if (!t) return; const avg = scores.length ? (scores.reduce((x, y) => x + y, 0) / scores.length).toFixed(1) : ""; t.textContent = asked ? `Question ${asked}` + (avg ? ` · average ${avg}/10` : "") : ""; };
+    const focusTopic = () => { const f = ids.box === "warm" && document.querySelector('input[name="wf"]:checked'); return f && f.value ? `\nFocus this question on ${f.value}.` : ""; };
+    a.onkeydown = (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send.click(); } };
+    const run = async (prompt, onDone) => {
+      if (busy) return; busy = true; start.disabled = send.disabled = true; q.classList.add("thinking"); q.textContent = "Thinking…";
+      try {
+        const { text } = await sample(prompt, { cache: false, onText: ({ text }) => { q.classList.remove("thinking"); q.textContent = text; } });
+        q.textContent = text; lastText = text; say.hidden = !("speechSynthesis" in window); onDone && onDone(text);
+      } catch (e) {
+        q.textContent = e && e.code === "not_granted" ? "Allow me to ask Claude when prompted, then try again." : e && e.code === "rate_limited" ? "One moment; too many requests just now." : ((e && e.text) || "That didn't work. Try again.");
+      } finally { busy = false; q.classList.remove("thinking"); start.disabled = send.disabled = false; }
+    };
+    start.onclick = () => run(RULES(ctx) + focusTopic() + "\n\nAsk ONE interview question now. Output only the question, then on a new line in brackets what a strong answer covers in under 15 words.", (t) => { question = t; asked++; tally(); a.hidden = false; a.value = ""; send.hidden = false; if (hint) hint.hidden = false; start.textContent = "Next question"; a.focus(); });
+    send.onclick = () => { if (!a.value.trim()) { a.focus(); return; } run(RULES(ctx) + `\n\nQuestion asked:\n${question}\n\nThe candidate's answer:\n${a.value}\n\nGive feedback in this form, under 170 words: one line verdict with a score out of 10 written as "Score: N/10"; "Keep:" what worked; "Sharpen:" 2-3 specific fixes; "Stronger version:" a tighter answer using only facts the candidate gave or the prep pack.`, (t) => { const m = /(\d+(?:\.\d)?)\s*\/\s*10/.exec(t); if (m) { scores.push(Math.min(10, Number(m[1]))); tally(); } }); };
+    say.onclick = () => speak(lastText);
+  }
+
+  fetch("preps/index.json").then(r => r.json()).then(ix => {
+    const m = ix.meta || {};  // names and links come from config/pages.json through scripts/ashford_sync.py
+    who = String(m.first_name || "");
+    const link = (id, url) => { const a = $(id); if (a && /^https:\/\//.test(url || "")) { a.href = url; a.hidden = false; } };
+    link("lDash", m.dashboard_url); link("lSterling", m.sterling_url);
+    preps = (ix.preps || []).filter(p => p && p.slug);
+    if (!preps.length) return;
+    renderRail();
+    const want = (location.hash || "").slice(1);
+    open(preps.some(p => p.slug === want) ? want : preps[0].slug);
+  }).catch(() => {});
+
+  const noPractice = () => { const h = $("wHint"); if (h) h.textContent = "Practice needs this page opened in Claude while signed in. Allow it to ask Claude when prompted."; const b = $("wStart"); if (b) b.disabled = true; };
+  const ready = (s) => { sample = s; if (!s) { noPractice(); return; }
+    if (!preps.length) wirePractice({ box: "warm", q: "wq", a: "wa", start: "wStart", send: "wSend", say: "wSay", tally: "wTally", hint: "wHint" }, "");
+    else if (packCtx && $("prac")) wirePractice({ box: "prac", q: "pq", a: "pa", start: "pStart", send: "pSend", say: "pSay", tally: "pTally", hint: "pHint" }, packCtx); };
+  if (window.claude && typeof window.claude.use === "function") window.claude.use("sample").then(ready).catch(noPractice);
+  else noPractice();
+})();
+</script>

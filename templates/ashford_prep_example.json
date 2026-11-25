@@ -1,0 +1,51 @@
+{
+ "_example": "Made-up content showing the shape of one Ashford prep. Real preps go in tracker/ashford/<slug>.json, never in this folder. Remove this key in a real prep.",
+ "slug": "northwind-analytics-data-analyst",
+ "company": "Northwind Analytics",
+ "role": "Data Analyst",
+ "location": "Remote (Europe)",
+ "stage": "screening",
+ "status": "upcoming",
+ "deadline": "2030-03-12T14:00:00+01:00",
+ "deadline_text": "Tue 12 Mar, 14:00 your time (13:00 London)",
+ "invitation": "A 30-minute video screening call with the talent team, booked through their scheduling link.",
+ "applied": {"date": "2030-03-01", "channel": "greenhouse", "cv": "CV_Data.pdf", "folder": "applications/20300301_Northwind_Data_Analyst"},
+ "updated": "2030-03-05",
+ "cheat_sheet": [
+  "Pitch in 30 seconds: what you do, one result you're proud of, why this role.",
+  "Proof point 1: the reporting work on your CV, in your own numbers.",
+  "Proof point 2: FILL IN (no story on file yet): a time you found an error in a dataset and what you did.",
+  "Say: what drew you to their product. Avoid: guessing at anything not on your CV.",
+  "Close: ask what the first 90 days look like."
+ ],
+ "brief": [
+  "Northwind Analytics builds dashboards for small retailers (Ashford's summary of their site).",
+  "Team of about 80 people, fully remote (estimate from a third-party profile).",
+  "Recent news: a new product for inventory forecasting.",
+  "Interview process reported by candidates: screening, a take-home, then a panel (Ashford's inference from public reviews)."
+ ],
+ "fit": [
+  {"req": "SQL every day", "me": "Daily SQL in your last role, per your CV."},
+  {"req": "A BI tool", "me": "Gap. You've used spreadsheets heavily; say so plainly and mention you're learning one."}
+ ],
+ "likely_questions": [
+  {"q": "Their question: Why are you interested in this role?", "why": "They ask everyone this in screening.", "answer": "A short draft in your voice, built only from your CV and your own words."},
+  {"q": "Walk me through a project you're proud of.", "why": "Checks how you explain your work.", "answer": "FILL IN (no story on file yet): pick one project and the result it had."}
+ ],
+ "technical_topics": [
+  {"topic": "SQL joins and window functions", "refresher": "Know when LEFT JOIN keeps rows, and how ROW_NUMBER() ranks within a group."}
+ ],
+ "take_home_plan": [],
+ "questions_to_ask": [
+  "What does a good first quarter look like in this role?",
+  "How does the team decide what to build next?"
+ ],
+ "logistics": [
+  "Test the video link and microphone 15 minutes before.",
+  "Have your CV and the job description open.",
+  "Quiet room, phone on silent."
+ ],
+ "sources": [
+  {"title": "Company careers page (example)", "url": "https://example.com/careers"}
+ ]
+}

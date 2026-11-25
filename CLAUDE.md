@@ -7,6 +7,7 @@ If `config/setup_state.md` doesn't exist or doesn't say `SETUP COMPLETE`, and th
 
 ## Once setup is complete
 - `RUN_ROUND.md` is one working round. `AGENT_BRIEF.md` is what every application agent reads.
+- `ASHFORD_BRIEF.md` is what the optional interview-prep agent reads. Optional pages are switched on in `config/pages.json`.
 - If the owner types "Start" after setup is complete, don't repeat setup. Tell them where things stand and ask what they'd like next.
 
 ## Rules that are never dropped

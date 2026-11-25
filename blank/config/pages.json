@@ -1,0 +1,13 @@
+{
+  "_help": "Settings for the optional companion pages, Sterling (briefing) and Ashford (interview prep). Setup fills this in. Leave a value empty to leave it out.",
+  "first_name": "",
+  "time_zone": "",
+  "focus_label": "",
+  "focus_countries": [],
+  "sterling": false,
+  "ashford": false,
+  "dashboard_url": "",
+  "sterling_url": "",
+  "ashford_url": "",
+  "supporters_note": ""
+}

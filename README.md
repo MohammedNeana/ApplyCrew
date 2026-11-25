@@ -42,6 +42,14 @@ That's the whole install. It asks for your CV first, and it takes it from there.
 
 <p align="center"><img src="docs/dashboard-preview.svg" alt="Illustration of the dashboard with made-up data." width="100%"></p>
 
+## Two optional helpers
+
+Setup asks if you want them. Both are private pages you can open in Claude, and both refresh only when your inbox brings something new, to save your plan's usage.
+
+**Sterling, your briefing.** A short note on top of your dashboard, and a page you can ask questions: what went out today, who replied, what's waiting on you. You can share it with people supporting you, such as family or a mentor. It reads only the dashboard's data, so it has no contact details or salaries.
+
+**Ashford, your interview coach.** When an employer actually invites you to an interview, a test or a screening, Ashford writes a prep pack for that company: a one-page cheat sheet, what they do, your experience against each requirement, likely questions with draft answers in your voice, and a checklist. It can also run a practice interview with you. Where it has no real story of yours to use, it leaves a gap for you to fill rather than invent one.
+
 ## Why it's not a spam bot
 
 - **It never lies for you.** Every answer traces back to your CV or to something you said. A blank stays blank.
